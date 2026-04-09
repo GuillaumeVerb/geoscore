@@ -1,0 +1,13 @@
+---
+description: Conventions frontend Next.js pour Geoscore
+globs: "**/*.{tsx,ts,jsx,js}"
+---
+
+# Frontend Next.js
+
+- App Router par défaut si le projet l’utilise ; composants réutilisables et pages fines.
+- Appels API typés (types partagés ou générés depuis OpenAPI si disponible).
+- Gestion d’état locale par défaut ; état global seulement si nécessaire.
+- Accessibilité et feedback utilisateur (chargement, erreurs) sur les flux critiques.
+
+Référence : `docs/03-build/frontend-tasks.md`.

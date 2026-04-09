@@ -1,0 +1,13 @@
+---
+description: Principes d’architecture Geoscore (services, données, flux)
+globs: "**/*"
+---
+
+# Architecture
+
+- **Backend** : API FastAPI ; contrats et évolution décrits dans `docs/01-architecture/api-design.md`.
+- **Frontend** : Next.js ; tâches et conventions dans `frontend-nextjs.mdc` et `docs/03-build/frontend-tasks.md`.
+- **Pipeline d’analyse** : étapes et intégrations dans `docs/01-architecture/pipeline-analysis.md`.
+- **Données** : schéma cible dans `docs/01-architecture/database-schema.md`.
+
+Préférer des frontières claires API / jobs / scoring ; éviter la logique métier lourde côté UI.

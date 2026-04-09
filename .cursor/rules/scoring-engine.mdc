@@ -1,0 +1,13 @@
+---
+description: Règles d’implémentation du moteur de scoring Geoscore
+globs: "**/*"
+---
+
+# Moteur de scoring
+
+- La logique de score doit refléter `docs/02-scoring/scoring-engine-v1.md` et le catalogue `docs/02-scoring/rules-catalog-v1.md`.
+- Schéma d’extraction / données structurées : `docs/02-scoring/extraction-schema-v1.md`.
+- Recommandations affichées : alignement sur `docs/02-scoring/recommendations-mapping.md`.
+- Usage LLM : `docs/02-scoring/llm-strategy.md` (prompts, garde-fous, coûts).
+
+Toute nouvelle règle : documenter le poids, les entrées et les cas limites avant ou en parallèle du code.

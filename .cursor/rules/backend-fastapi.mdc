@@ -1,0 +1,13 @@
+---
+description: Conventions backend FastAPI pour Geoscore
+globs: "**/*.py"
+---
+
+# Backend FastAPI
+
+- Endpoints versionnés (`/api/v1/...`) quand le contrat est public.
+- Schémas Pydantic pour entrées/sorties ; erreurs structurées (code, message, détails optionnels).
+- Pas de secrets dans le code ; configuration via variables d’environnement.
+- Tests ciblés pour la logique métier et les routes critiques.
+
+Référence détaillée : `docs/03-build/backend-tasks.md`, `docs/01-architecture/api-design.md`.

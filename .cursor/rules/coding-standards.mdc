@@ -1,0 +1,13 @@
+---
+description: Standards de code et de review Geoscore
+globs: "**/*"
+---
+
+# Standards de code
+
+- Lisibilité et noms explicites ; fonctions courtes avec une responsabilité claire.
+- Formatter/linter du projet respectés avant commit.
+- Pas de refactor massif non demandé ; diffs focalisés sur la tâche.
+- Commentaires pour le « pourquoi » non évident, pas pour paraphraser le code.
+
+Les règles `.mdc` et `AGENTS.md` complètent ce fichier pour l’agent et l’équipe.

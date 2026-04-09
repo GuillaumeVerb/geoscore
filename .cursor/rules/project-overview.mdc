@@ -1,0 +1,13 @@
+---
+description: Contexte produit Geoscore — objectif, périmètre MVP, glossaire
+globs: "**/*"
+alwaysApply: true
+---
+
+# Geoscore — vue projet
+
+- **Produit** : plateforme d’analyse et de scoring (SEO / visibilité locale / signaux géographiques selon la vision produit).
+- **MVP** : parcours minimal documenté dans `docs/03-build/mvp-checklist.md`.
+- **Sources de vérité** : vision et positionnement dans `docs/00-product/`, architecture dans `docs/01-architecture/`, moteur de score dans `docs/02-scoring/`.
+
+Quand tu implémentes, aligne les choix sur ces documents ; si un point manque, propose une mise à jour ciblée plutôt qu’une supposition implicite.
