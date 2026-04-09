@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: geoscore
+      POSTGRES_PASSWORD: geoscore
+      POSTGRES_DB: geoscore
+    volumes:
+      - geoscore_pg:/var/lib/postgresql/data
+
+volumes:
+  geoscore_pg:

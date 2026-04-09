@@ -1,15 +1,40 @@
-# Stratégie LLM
+# LLM strategy
 
-## Usage envisagé
+## Principle
+GeoScore must be LLM-agnostic.
 
-- Résumés, reformulations, ou extraction assistée **uniquement** si cadré par des schémas et validations.
+## Role of LLM
+The LLM layer is used for:
+- clarity evaluation
+- extractability evaluation
+- citation-readiness evaluation
+- entity-trust evaluation
+- short summary generation
+- recommendation enrichment
 
-## Garde-fous
+## What LLM must not do
+- own the scoring logic
+- read full raw HTML by default
+- return long unstructured prose
+- silently override deterministic results
 
-- Données sensibles : politique de rétention et d’anonymisation.
-- Coûts : budget par analyse, modèles par tâche.
-- Fiabilité : sorties structurées (JSON schema), rejet / retry sur parse invalide.
+## Token budget policy
+Use a bounded normalized payload:
+- title
+- meta description
+- hero
+- headings
+- main excerpt
+- structural feature flags
+- trust signal summary
+- limitations
 
-## Hors scope LLM (à confirmer)
+## Cost policy
+Default provider should be low-cost.
+Premium providers can be used for premium modes or internal QA.
 
-- Calcul du score final sans règles déterministes documentées.
+## Fallback policy
+If LLM is unavailable:
+- analysis still completes if deterministic extraction is sufficient
+- confidence is reduced
+- limitations are surfaced

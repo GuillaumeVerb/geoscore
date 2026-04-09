@@ -1,13 +1,55 @@
 ---
-description: Standards de code et de review Geoscore
-globs: "**/*"
+description: General coding standards for GeoScore
+alwaysApply: true
 ---
 
-# Standards de code
+# Coding standards
 
-- Lisibilité et noms explicites ; fonctions courtes avec une responsabilité claire.
-- Formatter/linter du projet respectés avant commit.
-- Pas de refactor massif non demandé ; diffs focalisés sur la tâche.
-- Commentaires pour le « pourquoi » non évident, pas pour paraphraser le code.
+## General style
 
-Les règles `.mdc` et `AGENTS.md` complètent ce fichier pour l’agent et l’équipe.
+Prefer:
+- explicit names
+- small modules
+- typed interfaces
+- predictable control flow
+- comments only when useful
+
+Avoid:
+- over-abstraction
+- deeply nested logic
+- magic constants without names
+- silent fallbacks
+
+## Naming
+
+Use names aligned with product docs:
+- scan
+- extraction
+- page_type
+- confidence
+- issue
+- recommendation
+- limitation
+- public_report
+
+## Versioning
+
+Always make versioned constants explicit:
+- extraction_version
+- scoring_version
+- ruleset_version
+- prompt_version
+
+## Tests
+
+When implementing core logic, prefer adding tests for:
+- extraction normalization
+- rules triggering
+- score aggregation
+- page type detection
+- confidence labels
+
+## Refactors
+
+Do not do broad refactors unless asked.
+Keep changes scoped to the task.

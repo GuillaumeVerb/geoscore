@@ -1,13 +1,75 @@
 ---
-description: Principes d’architecture Geoscore (services, données, flux)
-globs: "**/*"
+description: GeoScore architecture rules
+alwaysApply: true
 ---
 
-# Architecture
+# Architecture rules
 
-- **Backend** : API FastAPI ; contrats et évolution décrits dans `docs/01-architecture/api-design.md`.
-- **Frontend** : Next.js ; tâches et conventions dans `frontend-nextjs.mdc` et `docs/03-build/frontend-tasks.md`.
-- **Pipeline d’analyse** : étapes et intégrations dans `docs/01-architecture/pipeline-analysis.md`.
-- **Données** : schéma cible dans `docs/01-architecture/database-schema.md`.
+## Main architecture
 
-Préférer des frontières claires API / jobs / scoring ; éviter la logique métier lourde côté UI.
+GeoScore must be split into clear layers:
+
+1. submission layer
+2. fetch/render layer
+3. extraction layer
+4. page type detection layer
+5. deterministic scoring layer
+6. LLM semantic layer
+7. aggregation and report layer
+
+## Backend separation
+
+Keep the backend modular:
+- api routes
+- db models
+- services
+- extraction
+- scoring
+- llm
+- reports
+
+Avoid mixing concerns.
+
+## Data flow
+
+URL -> render -> extract -> detect page type -> score rules -> optional llm -> aggregate -> persist -> return report
+
+## Versioning
+
+Always preserve:
+- extraction_version
+- scoring_version
+- ruleset_version
+- llm_prompt_version
+
+## Explainability
+
+Every score must be traceable to:
+- extracted signals
+- triggered rules
+- bounded LLM adjustments
+
+Never implement a score that cannot be explained.
+
+## Reliability
+
+If render is partial or blocked:
+- store limitations
+- reduce confidence
+- avoid overclaiming accuracy
+
+## Public reports
+
+Public reports must expose:
+- URL
+- scan date
+- scores
+- page type
+- confidence
+- key issues
+- priority fixes
+
+Public reports must not expose:
+- raw debug data
+- internal model payloads
+- private account data

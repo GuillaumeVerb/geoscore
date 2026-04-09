@@ -1,13 +1,73 @@
 ---
-description: Conventions frontend Next.js pour Geoscore
-globs: "**/*.{tsx,ts,jsx,js}"
+description: Next.js frontend conventions for GeoScore
+alwaysApply: false
+globs:
+  - "app/**/*.tsx"
+  - "components/**/*.tsx"
+  - "src/**/*.tsx"
 ---
 
-# Frontend Next.js
+# Frontend conventions
 
-- App Router par défaut si le projet l’utilise ; composants réutilisables et pages fines.
-- Appels API typés (types partagés ou générés depuis OpenAPI si disponible).
-- Gestion d’état locale par défaut ; état global seulement si nécessaire.
-- Accessibilité et feedback utilisateur (chargement, erreurs) sur les flux critiques.
+## UI philosophy
 
-Référence : `docs/03-build/frontend-tasks.md`.
+The UI must stay minimal.
+
+Primary flow:
+- landing page with URL input
+- result page with scores and fixes
+- optional dashboard/history
+- public report page
+
+Do not overload screens with SEO jargon or too many panels.
+
+## Main result page sections
+
+1. score header
+2. summary
+3. strengths
+4. issues
+5. priority fixes
+6. detailed breakdown
+7. limitations
+8. share / rescan actions
+
+## Required visible signals
+
+The UI must display:
+- global score
+- SEO score
+- GEO score
+- page type
+- confidence
+- analysis status
+- limitations if any
+
+## Page type
+
+Page type detection must be visible and editable.
+
+## Partial analysis
+
+If analysis is partial or limited:
+- show a visible warning banner
+- adjust tone to be cautious
+- never imply full certainty
+
+## Loading state
+
+Use a simple loading state.
+Do not fake precision while analysis is still running.
+
+## Component principles
+
+Prefer:
+- small presentational components
+- a clean score header
+- explicit status cards
+- readable lists
+
+Avoid:
+- dense dashboards
+- too many charts
+- enterprise-style clutter

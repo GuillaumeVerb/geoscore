@@ -1,12 +1,37 @@
-# Moteur de scoring — v1
+# Scoring engine V1
 
-## Objectif
+## Goal
+Turn one normalized page extraction into:
+- global score
+- SEO score
+- GEO score
+- issues
+- recommendations
+- confidence
 
-Produire un score agrégé et des sous-scores interprétables à partir des données extraites.
+## Score model
+- Global Score = 50 percent SEO + 50 percent GEO
 
-## À préciser
+## SEO pillars
+- technical basics
+- on-page structure
+- content signals
+- discoverability
 
-- Échelle du score (0–100, etc.)
-- Pondération des familles de règles
-- Seuils qualitatifs (ex. bon / moyen / faible)
-- Versioning du moteur (compatibilité des rapports historiques)
+## GEO pillars
+- clarity of intent
+- extractability
+- citation readiness
+- entity trust
+
+## Core rule
+Deterministic rules are primary.
+LLM is secondary and bounded.
+
+## Required outputs
+- scores
+- sub-scores
+- issues
+- recommendations
+- confidence
+- limitations

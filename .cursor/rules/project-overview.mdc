@@ -1,13 +1,60 @@
 ---
-description: Contexte produit Geoscore — objectif, périmètre MVP, glossaire
-globs: "**/*"
+description: GeoScore project context and product constraints
 alwaysApply: true
 ---
 
-# Geoscore — vue projet
+# GeoScore project overview
 
-- **Produit** : plateforme d’analyse et de scoring (SEO / visibilité locale / signaux géographiques selon la vision produit).
-- **MVP** : parcours minimal documenté dans `docs/03-build/mvp-checklist.md`.
-- **Sources de vérité** : vision et positionnement dans `docs/00-product/`, architecture dans `docs/01-architecture/`, moteur de score dans `docs/02-scoring/`.
+GeoScore is a minimal SEO & GEO analyzer for websites and apps.
 
-Quand tu implémentes, aligne les choix sur ces documents ; si un point manque, propose une mise à jour ciblée plutôt qu’une supposition implicite.
+The product must feel as simple as a lightweight utility tool:
+- paste URL
+- click analyze
+- get scores and fixes
+
+But the analysis must be rigorous:
+- deterministic rules first
+- LLM second
+- explainable scoring
+- bounded cost
+- visible confidence and limitations
+
+## Product outputs
+
+Every completed scan should return:
+- global_score
+- seo_score
+- geo_score
+- page_type_final
+- analysis_confidence
+- strengths
+- issues
+- recommendations
+- limitations
+
+## Product philosophy
+
+Simple on the surface, serious underneath.
+
+Do not bloat the product.
+Do not design a full SEO suite.
+Do not introduce hidden magic into scoring.
+
+## Docs source of truth
+
+The authoritative docs live in:
+- docs/00-product/
+- docs/01-architecture/
+- docs/02-scoring/
+- docs/03-build/
+
+Read the relevant docs before implementing.
+
+## Architectural constraints
+
+- Frontend: Next.js
+- Backend: FastAPI
+- Database: Postgres
+- Rendering: Playwright
+- LLM: provider-agnostic
+- Scoring: deterministic-first

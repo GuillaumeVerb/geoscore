@@ -1,13 +1,82 @@
 ---
-description: Règles d’implémentation du moteur de scoring Geoscore
-globs: "**/*"
+description: Scoring engine rules and non-negotiables
+alwaysApply: true
 ---
 
-# Moteur de scoring
+# Scoring engine rules
 
-- La logique de score doit refléter `docs/02-scoring/scoring-engine-v1.md` et le catalogue `docs/02-scoring/rules-catalog-v1.md`.
-- Schéma d’extraction / données structurées : `docs/02-scoring/extraction-schema-v1.md`.
-- Recommandations affichées : alignement sur `docs/02-scoring/recommendations-mapping.md`.
-- Usage LLM : `docs/02-scoring/llm-strategy.md` (prompts, garde-fous, coûts).
+## Core principle
 
-Toute nouvelle règle : documenter le poids, les entrées et les cas limites avant ou en parallèle du code.
+Deterministic rules are the primary source of truth.
+LLM is secondary and bounded.
+
+## Score outputs
+
+The engine must produce:
+- global_score
+- seo_score
+- geo_score
+- seo_subscores
+- geo_subscores
+- issues
+- recommendations
+- confidence
+- limitations
+
+## Global score
+
+Global score is based on:
+- 50 percent SEO
+- 50 percent GEO
+
+This must remain explainable.
+
+## SEO score philosophy
+
+SEO measures:
+- technical basics
+- on-page structure
+- content signals
+- discoverability
+
+## GEO score philosophy
+
+GEO measures:
+- clarity of intent
+- extractability
+- citation readiness
+- entity trust
+
+## LLM policy
+
+LLM must:
+- consume normalized payload, not raw page HTML
+- return strict structured output
+- operate within a token budget
+- never fully determine final scores
+
+## Adjustment policy
+
+LLM adjustments must be bounded.
+Never allow unbounded score swings from LLM output.
+
+## Explainability
+
+Each issue must map to:
+- triggered rule(s)
+- evidence
+- recommendation
+
+## Page type
+
+Scoring must be page-type aware.
+Page type must be overridable by the user.
+
+## Confidence
+
+Confidence must reflect:
+- render quality
+- extraction completeness
+- page type confidence
+- LLM availability
+- limitations

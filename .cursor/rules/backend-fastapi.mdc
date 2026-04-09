@@ -1,13 +1,71 @@
 ---
-description: Conventions backend FastAPI pour Geoscore
-globs: "**/*.py"
+description: FastAPI backend conventions for GeoScore
+alwaysApply: false
+globs:
+  - "app/**/*.py"
+  - "backend/**/*.py"
 ---
 
-# Backend FastAPI
+# FastAPI backend conventions
 
-- Endpoints versionnés (`/api/v1/...`) quand le contrat est public.
-- Schémas Pydantic pour entrées/sorties ; erreurs structurées (code, message, détails optionnels).
-- Pas de secrets dans le code ; configuration via variables d’environnement.
-- Tests ciblés pour la logique métier et les routes critiques.
+## General
 
-Référence détaillée : `docs/03-build/backend-tasks.md`, `docs/01-architecture/api-design.md`.
+Use FastAPI with:
+- Pydantic models for request and response contracts
+- service modules for business logic
+- explicit typed return shapes
+- small focused files
+
+## Preferred layout
+
+- app/api/
+- app/models/
+- app/schemas/
+- app/services/
+- app/db/
+- app/core/
+
+## Service boundaries
+
+Keep separate services for:
+- scan_service
+- render_service
+- extraction_service
+- page_type_service
+- scoring_service
+- llm_service
+- report_service
+
+## API design
+
+Routes should be explicit and REST-like.
+
+Main routes:
+- POST /api/scans
+- GET /api/scans/{scan_id}
+- POST /api/scans/{scan_id}/rescan
+- PATCH /api/scans/{scan_id}/page-type
+- POST /api/scans/{scan_id}/public-report
+- GET /api/public-reports/{public_id}
+
+## Error handling
+
+Return explicit error states and error codes.
+Do not hide partial failures.
+Persist limitations and confidence impact.
+
+## Scoring integration
+
+Backend should never hardcode final copy inside route handlers.
+Route handlers should orchestrate services, not implement scoring logic inline.
+
+## Persistence
+
+Persist:
+- scan status
+- fetch/render info
+- extraction object
+- scores
+- issues
+- recommendations
+- llm output metadata

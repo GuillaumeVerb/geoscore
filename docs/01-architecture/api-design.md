@@ -1,16 +1,48 @@
-# Design API
+# API design
 
-## Conventions
+## Main routes
 
-- Préfixe versionné recommandé : `/api/v1`.
-- Réponses JSON ; erreurs avec structure stable (ex. `error`, `message`, `details`).
+### POST /api/scans
+Create a scan from a URL.
 
-## Ressources à spécifier
+### GET /api/scans/{scan_id}
+Return scan status and result.
 
-- Authentification (si applicable)
-- CRUD ou actions métier (analyses, rapports, comptes)
-- Pagination et filtres communs
+### POST /api/scans/{scan_id}/rescan
+Create a new scan from an existing one.
 
-## Évolution
+### PATCH /api/scans/{scan_id}/page-type
+Override page type and recalculate scoring.
 
-- Dépréciation annoncée sur au moins une version ; changelog produit côté doc ou OpenAPI.
+### POST /api/scans/{scan_id}/public-report
+Generate or enable a public report.
+
+### GET /api/public-reports/{public_id}
+Return a public report.
+
+## Status lifecycle
+- created
+- queued
+- fetching
+- rendering
+- extracting
+- scoring_rules
+- scoring_llm
+- aggregating
+- completed
+- partial
+- failed
+
+## Result payload essentials
+- scan_id
+- status
+- page_type_detected
+- page_type_final
+- analysis_confidence
+- global_score
+- seo_score
+- geo_score
+- strengths
+- issues
+- recommendations
+- limitations

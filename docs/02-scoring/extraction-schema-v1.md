@@ -1,11 +1,33 @@
-# Schéma d’extraction — v1
+# Extraction schema V1
 
-Structure des données produites par l’étape d’extraction (JSON schéma ou tables équivalentes).
+## Purpose
+The extraction schema is the normalized data object produced by the extraction pipeline.
 
-## Champs (placeholder)
+It is the source input for:
+- deterministic scoring
+- page type detection
+- LLM payload generation
+- reports
 
-- Métadonnées de la source analysée
-- Signaux numériques et booléens utilisés par les règles
-- Horodatage et version du schéma
+## Main top-level sections
+- schema_version
+- scan_id
+- url_info
+- fetch_info
+- render_info
+- page_detection
+- meta
+- headings
+- content
+- links
+- media
+- structured_data
+- trust_signals
+- page_features
+- derived_metrics
+- limitations
+- llm_payload_candidate
 
-Valider avec le pipeline dans `docs/01-architecture/pipeline-analysis.md`.
+## Principle
+Do not score directly from raw HTML.
+Score from normalized extracted signals.

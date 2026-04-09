@@ -1,10 +1,33 @@
-# Feuille de route implémentation
+# Implementation roadmap
 
-## Phases suggérées
+## Sprint 1
+- project scaffolding
+- FastAPI app skeleton
+- Next.js app skeleton
+- DB setup
+- scan submission route
+- scan status route
 
-1. Fondations repo : API squelette, frontend squelette, CI minimale.
-2. Pipeline bout-en-bout mock → réel pour une première analyse.
-3. Moteur v1 + catalogue de règles minimal.
-4. Durcissement : auth, observabilité, limites MVP checklist.
+## Sprint 2
+- Playwright render service
+- extraction pipeline
+- extraction schema models
+- persistence of extraction data
 
-Synchroniser avec `backend-tasks.md` et `frontend-tasks.md`.
+## Sprint 3
+- page type detection
+- deterministic scoring engine
+- issues and recommendations mapping
+- confidence calculation
+
+## Sprint 4
+- result page UI
+- partial and failed states
+- page type override
+- public report route and page
+
+## Sprint 5
+- rescan flow
+- history page
+- usage limits
+- billing wiring

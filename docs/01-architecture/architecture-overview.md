@@ -1,13 +1,37 @@
-# Vue d’ensemble architecture
+# Architecture overview
 
-## Composants
+## Stack
+- Next.js frontend
+- FastAPI backend
+- Postgres database
+- Playwright rendering
+- provider-agnostic LLM layer
+- Stripe for billing
 
-- **API** : FastAPI — exposition des endpoints métier et orchestration légère.
-- **Frontend** : Next.js — interface utilisateur et appels API.
-- **Moteur de scoring** : logique déterministe + éventuellement enrichissement LLM selon `docs/02-scoring/llm-strategy.md`.
-- **Persistance** : base relationnelle ou adaptée au schéma défini dans `database-schema.md`.
+## Main pipeline
+1. submit URL
+2. normalize URL
+3. fetch or render page
+4. extract normalized signals
+5. detect page type
+6. compute deterministic scores
+7. optionally run LLM semantic analysis
+8. aggregate final report
+9. persist report
+10. return result
 
-## Principes
+## Design principles
+- modular services
+- deterministic scoring first
+- bounded LLM usage
+- visible confidence
+- explicit limitations
+- clean public reports
 
-- Séparation scoring / ingestion / présentation.
-- Traçabilité des exécutions d’analyse (audit, debug).
+## Key objects
+- scan
+- extraction
+- score
+- issue
+- recommendation
+- public report

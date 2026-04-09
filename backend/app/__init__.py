@@ -1,0 +1,1 @@
+"""GeoScore FastAPI application package."""
