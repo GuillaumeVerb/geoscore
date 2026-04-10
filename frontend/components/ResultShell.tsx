@@ -1,6 +1,7 @@
 import { IssuesList } from "@/components/IssuesList";
 import { MockDataBanner } from "@/components/MockDataBanner";
 import { PageTypeConfidenceCard } from "@/components/PageTypeConfidenceCard";
+import { PageTypeSelector } from "@/components/PageTypeSelector";
 import { RecommendationsList } from "@/components/RecommendationsList";
 import { RescanButton } from "@/components/RescanButton";
 import { ScanStatusCard } from "@/components/ScanStatusCard";
@@ -12,17 +13,23 @@ import { SummaryCard } from "@/components/SummaryCard";
 import type { DataSource } from "@/lib/loadScan";
 import type { ScanStatus } from "@/types/scan";
 
-import { PageTypeSelector } from "@/components/PageTypeSelector";
-
 type Props = {
   scan: ScanStatus;
   routeScanId: string;
   source: DataSource;
   urlDisplay?: string;
   onLocalPageType?: (pageType: string) => void;
+  onRefetchScan: () => Promise<void>;
 };
 
-export function ResultShell({ scan, routeScanId, source, urlDisplay, onLocalPageType }: Props) {
+export function ResultShell({
+  scan,
+  routeScanId,
+  source,
+  urlDisplay,
+  onLocalPageType,
+  onRefetchScan,
+}: Props) {
   const apiEnabled = source === "api";
   const limitations = scan.limitations ?? [];
 
@@ -93,16 +100,25 @@ export function ResultShell({ scan, routeScanId, source, urlDisplay, onLocalPage
         current={scan.page_type_final ?? scan.page_type_detected}
         apiEnabled={apiEnabled}
         onLocalPageType={onLocalPageType}
+        onAfterPatchSuccess={onRefetchScan}
       />
 
       <section className="card block">
         <SectionTitle>Actions</SectionTitle>
         <div className="row">
-          <RescanButton scanId={routeScanId} apiEnabled={apiEnabled} />
+          <RescanButton
+            scanId={routeScanId}
+            apiEnabled={apiEnabled}
+            onAfterRescan={onRefetchScan}
+          />
         </div>
       </section>
 
-      <ShareReportCard scanId={routeScanId} apiEnabled={apiEnabled} />
+      <ShareReportCard
+        scanId={routeScanId}
+        apiEnabled={apiEnabled}
+        onAfterCreate={onRefetchScan}
+      />
     </main>
   );
 }

@@ -268,3 +268,8 @@ a {
   font-size: 0.95rem;
   line-height: 1.55;
 }
+
+.syncHint {
+  margin: 0 0 0.75rem;
+  max-width: 40rem;
+}

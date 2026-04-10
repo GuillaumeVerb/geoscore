@@ -47,7 +47,11 @@ npm install
 npm run dev
 ```
 
-Set `NEXT_PUBLIC_API_URL` to the API origin (default `http://localhost:8000`).
+Set `NEXT_PUBLIC_API_URL` to the API origin (default `http://localhost:8000`). The browser calls this URL directly, so it must match where FastAPI listens (including port).
+
+### CORS (local dev)
+
+The Next.js app (e.g. `http://localhost:3000`) and the API (e.g. `http://localhost:8000`) are different origins. FastAPI must allow the frontend origin via `CORSMiddleware` (`CORS_ORIGINS` in `backend/.env`, see `backend/.env.example`). If you change the Next port, add it to `CORS_ORIGINS` as a comma-separated list.
 
 ## Stack (from docs)
 

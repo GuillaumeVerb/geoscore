@@ -13,7 +13,8 @@ export function SummaryCard({ url, summary }: Props) {
         <p className="summaryBody">{summary}</p>
       ) : (
         <p className="muted">
-          A short narrative will appear here once analysis completes (deterministic signals + optional LLM).
+          No summary in this response yet. It will appear when the API provides one (e.g. after aggregation
+          or optional LLM).
         </p>
       )}
       {url ? (

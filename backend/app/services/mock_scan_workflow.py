@@ -41,6 +41,7 @@ class MockScanWorkflow:
             issues=[],
             recommendations=[],
             limitations=[],
+            summary=None,
             extraction=None,
             error_code=None,
             error_message=None,
@@ -79,6 +80,7 @@ class MockScanWorkflow:
                 "recommendations": [],
                 "strengths": [],
                 "limitations": [],
+                "summary": None,
                 "analysis_confidence": AnalysisConfidence.UNKNOWN,
                 "error_code": None,
                 "error_message": None,
@@ -120,6 +122,7 @@ class MockScanWorkflow:
             top_issues=d.issues[:5],
             top_fixes=d.recommendations[:5],
             limitations=d.limitations,
+            summary=d.summary,
             analyzed_at=d.meta.get("completed_at"),
             meta={
                 k: v

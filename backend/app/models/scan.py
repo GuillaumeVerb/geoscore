@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional  # noqa: TC003 — Any used in JSONB strengths
 
 from sqlalchemy import DateTime, ForeignKey, Numeric, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -13,6 +13,11 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.project import Project
     from app.models.public_report import PublicReport
+    from app.models.scan_extraction import ScanExtraction
+    from app.models.scan_fetch_result import ScanFetchResult
+    from app.models.scan_issue import ScanIssue
+    from app.models.scan_recommendation import ScanRecommendation
+    from app.models.scan_score import ScanScore
     from app.models.user import User
 
 
@@ -45,6 +50,8 @@ class Scan(Base):
     llm_prompt_version: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     limitations: Mapped[Optional[Any]] = mapped_column(JSONB, nullable=True)
+    summary: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    strengths: Mapped[Optional[list[Any]]] = mapped_column(JSONB, nullable=True)
     error_code: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
@@ -58,3 +65,18 @@ class Scan(Base):
     project: Mapped[Optional[Project]] = relationship("Project", back_populates="scans")
     parent_scan: Mapped[Optional[Scan]] = relationship("Scan", remote_side=[id], foreign_keys=[parent_scan_id])
     public_reports: Mapped[list[PublicReport]] = relationship("PublicReport", back_populates="scan")
+    fetch_results: Mapped[list[ScanFetchResult]] = relationship(
+        "ScanFetchResult", back_populates="scan", cascade="all, delete-orphan"
+    )
+    extractions: Mapped[list[ScanExtraction]] = relationship(
+        "ScanExtraction", back_populates="scan", cascade="all, delete-orphan"
+    )
+    scores: Mapped[list[ScanScore]] = relationship(
+        "ScanScore", back_populates="scan", cascade="all, delete-orphan"
+    )
+    issues: Mapped[list[ScanIssue]] = relationship(
+        "ScanIssue", back_populates="scan", cascade="all, delete-orphan"
+    )
+    recommendations: Mapped[list[ScanRecommendation]] = relationship(
+        "ScanRecommendation", back_populates="scan", cascade="all, delete-orphan"
+    )

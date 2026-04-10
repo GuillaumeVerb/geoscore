@@ -1,0 +1,18 @@
+[
+  {"id": "saas_home_stripe", "category": "homepage_saas", "url": "https://stripe.com"},
+  {"id": "saas_home_vercel", "category": "homepage_saas", "url": "https://vercel.com"},
+  {"id": "landing_linear", "category": "landing_modern", "url": "https://linear.app"},
+  {"id": "pricing_stripe", "category": "pricing", "url": "https://stripe.com/pricing"},
+  {"id": "pricing_notion", "category": "pricing", "url": "https://www.notion.so/pricing"},
+  {"id": "product_page_slack", "category": "product", "url": "https://slack.com/features"},
+  {"id": "article_mozilla", "category": "article", "url": "https://blog.mozilla.org/en/mozilla/mozilla-news/"},
+  {"id": "article_cloudflare", "category": "article", "url": "https://blog.cloudflare.com/welcome-to-cve-2024-6387/"},
+  {"id": "about_github", "category": "about", "url": "https://github.com/about"},
+  {"id": "about_atlassian", "category": "about", "url": "https://www.atlassian.com/company"},
+  {"id": "docs_react", "category": "js_heavy_docs", "url": "https://react.dev"},
+  {"id": "docs_nextjs", "category": "js_heavy_docs", "url": "https://nextjs.org/docs"},
+  {"id": "marketing_hubspot", "category": "marketing_long", "url": "https://www.hubspot.com"},
+  {"id": "ecom_shopify", "category": "homepage_saas", "url": "https://www.shopify.com"},
+  {"id": "news_bbc", "category": "article_news", "url": "https://www.bbc.com/news"},
+  {"id": "app_web_twitter", "category": "js_heavy_app", "url": "https://x.com"}
+]

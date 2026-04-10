@@ -50,6 +50,10 @@ class ScanDetailResponse(BaseModel):
     issues: list[Issue] = Field(default_factory=list)
     recommendations: list[Recommendation] = Field(default_factory=list)
     limitations: list[Limitation] = Field(default_factory=list)
+    summary: str | None = Field(
+        default=None,
+        description="Short narrative for the report UI; optional until LLM/summary pipeline exists",
+    )
     extraction: ExtractionSchema | None = None
     error_code: str | None = None
     error_message: str | None = None
@@ -93,6 +97,7 @@ class PublicReportResponse(BaseModel):
     top_issues: list[Issue] = Field(default_factory=list)
     top_fixes: list[Recommendation] = Field(default_factory=list)
     limitations: list[Limitation] = Field(default_factory=list)
+    summary: str | None = None
     analyzed_at: str | None = None
     meta: dict[str, Any] = Field(default_factory=dict)
 

@@ -8,6 +8,8 @@ from app.core.config import settings
 from app.db.base import Base
 from app.db.session import engine
 
+import app.models  # noqa: F401 — register ORM tables for create_all
+
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):

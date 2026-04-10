@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { patchJson } from "@/lib/api";
@@ -22,6 +21,7 @@ type Props = {
   current?: string | null;
   apiEnabled?: boolean;
   onLocalPageType?: (pageType: string) => void;
+  onAfterPatchSuccess?: () => void | Promise<void>;
 };
 
 export function PageTypeSelector({
@@ -29,8 +29,8 @@ export function PageTypeSelector({
   current,
   apiEnabled = true,
   onLocalPageType,
+  onAfterPatchSuccess,
 }: Props) {
-  const router = useRouter();
   const [value, setValue] = useState(current ?? "other");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +49,7 @@ export function PageTypeSelector({
     }
     try {
       await patchJson<ScanStatus>(`/api/scans/${scanId}/page-type`, { page_type: value });
-      router.refresh();
+      await onAfterPatchSuccess?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Update failed");
     } finally {

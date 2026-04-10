@@ -5,11 +5,16 @@ import { useState } from "react";
 
 import { postJson } from "@/lib/api";
 
-type RescanApiResponse = { scan_id: string; parent_scan_id: string; status: string };
+type RescanApiResponse = { scan_id?: string; parent_scan_id?: string; status?: string };
 
-type Props = { scanId: string; apiEnabled?: boolean };
+type Props = {
+  scanId: string;
+  apiEnabled?: boolean;
+  /** When the API does not return a new scan id, reload the current scan. */
+  onAfterRescan?: () => void | Promise<void>;
+};
 
-export function RescanButton({ scanId, apiEnabled = true }: Props) {
+export function RescanButton({ scanId, apiEnabled = true, onAfterRescan }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +25,12 @@ export function RescanButton({ scanId, apiEnabled = true }: Props) {
     setError(null);
     try {
       const data = await postJson<RescanApiResponse>(`/api/scans/${scanId}/rescan`, {});
-      router.push(`/scan/${data.scan_id}`);
+      const nextId = data.scan_id;
+      if (nextId) {
+        router.push(`/scan/${nextId}`);
+        return;
+      }
+      await onAfterRescan?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Rescan failed");
     } finally {

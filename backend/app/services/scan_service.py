@@ -90,6 +90,7 @@ class ScanService:
             issues=issues,
             recommendations=recommendations,
             limitations=limitations,
+            summary=None,
             extraction=extraction,
             error_code=scan.error_code,
             error_message=scan.error_message,

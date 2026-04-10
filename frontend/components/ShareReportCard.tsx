@@ -5,9 +5,13 @@ import { useState } from "react";
 
 import { postJson } from "@/lib/api";
 
-type Props = { scanId: string; apiEnabled?: boolean };
+type Props = {
+  scanId: string;
+  apiEnabled?: boolean;
+  onAfterCreate?: () => void | Promise<void>;
+};
 
-export function ShareReportCard({ scanId, apiEnabled = true }: Props) {
+export function ShareReportCard({ scanId, apiEnabled = true, onAfterCreate }: Props) {
   const [publicPath, setPublicPath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,6 +26,7 @@ export function ShareReportCard({ scanId, apiEnabled = true }: Props) {
         {},
       );
       setPublicPath(res.url_path);
+      await onAfterCreate?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not create public link");
     } finally {

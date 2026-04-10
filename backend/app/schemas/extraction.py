@@ -31,6 +31,10 @@ class ExtractionSchema(BaseModel):
         description="Limitations emitted during extraction (distinct from report-level Limitation list)",
     )
     llm_payload_candidate: dict[str, Any] = Field(default_factory=dict)
+    pipeline_context: dict[str, Any] | None = Field(
+        default=None,
+        description="Scoring/fetch hints: partial, is_probably_spa, primary_fetch_method (optional)",
+    )
 
 
 ExtractionSchemaPlaceholder = ExtractionSchema

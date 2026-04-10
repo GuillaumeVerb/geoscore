@@ -71,6 +71,7 @@ The product outputs:
 - Never make scoring black-box.
 - Do not let LLM dominate the scoring logic.
 - Always store scoring_version, ruleset_version, and prompt_version.
+- **Scoring is frozen at `scoring-v1-cal03` / `ruleset-v1-cal03`.** Do not change the deterministic engine for broad re-calibration; only targeted fixes when a case is clearly wrong. Next improvement area: **partial scans** with strong limitations but little or no useful issues/recommendations — product/UX and rules at the margin, not a new global cal pass.
 - Always expose limitations when analysis is partial.
 - Page type detection must be visible and overridable by the user.
 - Confidence must be shown in the result.
