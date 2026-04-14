@@ -130,7 +130,7 @@ Railway’s builder only sees **the service root directory**. If the root is the
 1. In the **API** service: **Settings → Root directory** = `backend` (folder that contains `requirements.txt` and `app/`).
 2. **Config as code:** Railway merges `backend/railway.json` — set the service’s config file path to **`backend/railway.json`** if it is not picked up automatically (Railway’s config file path is from the **repository root**, not from the root directory).
 3. Env vars: same as “Deploy notes” below (`ENVIRONMENT`, `JWT_SECRET_KEY`, `DATABASE_URL`, `CORS_ORIGINS`, etc.).
-4. **Stuck on “Waiting for application startup”** (Uvicorn repeats, Railway restarts): the API runs **Alembic before it listens** for `/health`. That blocks until Postgres accepts connections. **Fix:** add the **Postgres** plugin (or correct `DATABASE_URL`) and **link** it to the API service so `DATABASE_URL` is set. Wrong host / no DB → connection errors after ~15s (timeout) instead of hanging forever. `backend/railway.json` runs **`alembic upgrade head`** in **pre-deploy**; you can set **`RUN_ALEMBIC_ON_STARTUP=false`** on the API service to skip the duplicate migration at container boot (pre-deploy only).
+4. **`connection refused` to `localhost:5432`** or stuck on startup: the API is still using the **dev default** `DATABASE_URL` (localhost). On Railway, open the **API** service → **Variables** → add **`DATABASE_URL`** using **Reference** to your **Postgres** service’s `DATABASE_URL` (not a hand-typed localhost URL). Linked variables are reliably available when the **container starts**; migrations run then (`RUN_ALEMBIC_ON_STARTUP`, default `true`). In production, a localhost DB URL now **fails fast** with an explicit config error.
 
 ---
 

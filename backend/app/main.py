@@ -18,12 +18,12 @@ async def lifespan(_app: FastAPI):
     # Schema: Alembic migrations are the source of truth (see docs/03-build/database-migrations.md).
     # Mock workflow has no persistent Postgres schema to migrate.
     if not settings.use_mock_workflow and settings.run_alembic_on_startup:
-        log.info("Running Alembic upgrade head (set RUN_ALEMBIC_ON_STARTUP=false if migrations run in pre-deploy).")
+        log.info("Running Alembic upgrade head (set RUN_ALEMBIC_ON_STARTUP=false if migrations run elsewhere).")
         run_alembic_upgrade_to_head()
         log.info("Alembic upgrade head finished.")
     elif not settings.use_mock_workflow:
         log.warning(
-            "RUN_ALEMBIC_ON_STARTUP=false: skipping Alembic at startup; ensure migrations ran (e.g. Railway pre-deploy)."
+            "RUN_ALEMBIC_ON_STARTUP=false: skipping Alembic at startup; ensure migrations ran in your release process."
         )
     yield
 
