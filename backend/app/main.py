@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, status
@@ -9,13 +10,21 @@ from app.core.config import settings
 from app.db.migrate import run_alembic_upgrade_to_head
 from app.db.session import engine
 
+log = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Schema: Alembic migrations are the source of truth (see docs/03-build/database-migrations.md).
     # Mock workflow has no persistent Postgres schema to migrate.
-    if not settings.use_mock_workflow:
+    if not settings.use_mock_workflow and settings.run_alembic_on_startup:
+        log.info("Running Alembic upgrade head (set RUN_ALEMBIC_ON_STARTUP=false if migrations run in pre-deploy).")
         run_alembic_upgrade_to_head()
+        log.info("Alembic upgrade head finished.")
+    elif not settings.use_mock_workflow:
+        log.warning(
+            "RUN_ALEMBIC_ON_STARTUP=false: skipping Alembic at startup; ensure migrations ran (e.g. Railway pre-deploy)."
+        )
     yield
 
 

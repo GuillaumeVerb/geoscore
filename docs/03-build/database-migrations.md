@@ -24,7 +24,9 @@ cd backend
 python -m alembic upgrade head
 ```
 
-Or start the API with **`USE_MOCK_WORKFLOW=false`**: on startup the app runs **`alembic upgrade head`** automatically (same as above).
+Or start the API with **`USE_MOCK_WORKFLOW=false`**: on startup the app runs **`alembic upgrade head`** automatically (same as above), unless **`RUN_ALEMBIC_ON_STARTUP=false`** (e.g. migrations already run in a platform pre-deploy step). Postgres connections use a **15s connect timeout** so a bad `DATABASE_URL` fails fast instead of blocking startup indefinitely.
+
+**Railway:** `backend/railway.json` includes a **pre-deploy** `alembic upgrade head`. Optionally set **`RUN_ALEMBIC_ON_STARTUP=false`** on the API service to avoid running migrations twice (pre-deploy + process startup).
 
 ## Existing database (was created with `create_all` only)
 

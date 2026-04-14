@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expire_days: int = 30
 
+    # When false, skip ``alembic upgrade head`` in API lifespan (use a release / pre-deploy step instead).
+    run_alembic_on_startup: bool = True
+
     # Optional headless render fallback (pipeline-analysis.md). Requires: pip install playwright && playwright install chromium
     playwright_enabled: bool = True
     playwright_timeout_ms: int = 25_000
