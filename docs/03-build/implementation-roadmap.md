@@ -31,3 +31,9 @@
 - history page
 - usage limits
 - billing wiring
+
+---
+
+**Run / deploy verification:** `README.md` (setup), `docs/03-build/verify-deployment.md` (checklist), `docs/03-build/release-readiness.md` (release priorities and deferrals).
+
+**Post–V1.5 product phases:** `docs/00-product/roadmap-v2-v3.md` (V2 / V3 — replaces this file as the forward-looking product plan once V1.5 ships).

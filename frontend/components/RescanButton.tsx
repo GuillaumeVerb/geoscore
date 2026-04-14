@@ -39,18 +39,23 @@ export function RescanButton({ scanId, apiEnabled = true, onAfterRescan }: Props
   }
 
   return (
-    <div className="stack">
+    <div className="stack" aria-busy={loading}>
       <button
         type="button"
         className="button secondary"
         onClick={rescan}
         disabled={loading || !apiEnabled}
-        title={!apiEnabled ? "Requires API" : undefined}
+        title={!apiEnabled ? "Not available with offline demo data" : undefined}
+        aria-label={loading ? "Starting rescan, please wait" : "Rescan this page"}
       >
         {loading ? "…" : "Rescan"}
       </button>
-      {!apiEnabled ? <p className="small muted">Rescan needs a connected API.</p> : null}
-      {error ? <p className="error">{error}</p> : null}
+      {!apiEnabled ? <p className="small muted">Rescan isn&apos;t available while viewing offline demo data.</p> : null}
+      {error ? (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

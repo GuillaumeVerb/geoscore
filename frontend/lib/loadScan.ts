@@ -4,6 +4,11 @@ import type { PublicReport, ScanStatus } from "@/types/scan";
 
 export type DataSource = "api" | "mock";
 
+function isUnauthorizedError(e: unknown): boolean {
+  const m = e instanceof Error ? e.message : String(e);
+  return /\b401\b/i.test(m) || m.toLowerCase().includes("not authenticated");
+}
+
 /** Normalize API/mock payloads so the UI always has arrays and stable fields. */
 export function normalizeScanDetail(raw: ScanStatus): ScanStatus {
   return {
@@ -41,7 +46,10 @@ export async function loadScanDetail(
   try {
     const scan = await getJson<ScanStatus>(`/api/scans/${scanId}`);
     return { scan: normalizeScanDetail(scan), source: "api" };
-  } catch {
+  } catch (e) {
+    if (isUnauthorizedError(e)) {
+      throw e;
+    }
     return {
       scan: normalizeScanDetail(buildMockScanDetail(scanId, urlHint)),
       source: "mock",
@@ -62,6 +70,7 @@ export async function fetchScanDetailFromApi(scanId: string): Promise<ScanStatus
 export function normalizePublicReport(raw: PublicReport): PublicReport {
   return {
     ...raw,
+    strengths: raw.strengths ?? [],
     top_issues: raw.top_issues ?? [],
     top_fixes: raw.top_fixes ?? [],
     limitations: raw.limitations ?? [],

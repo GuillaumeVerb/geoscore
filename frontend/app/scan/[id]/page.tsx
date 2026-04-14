@@ -9,8 +9,10 @@ export default async function ScanPage({ params }: Props) {
   return (
     <Suspense
       fallback={
-        <main className="resultMain">
-          <p className="muted">Loading…</p>
+        <main className="resultMain" aria-busy="true" aria-label="Scan result">
+          <p className="muted" role="status" aria-live="polite">
+            Loading scan…
+          </p>
         </main>
       }
     >

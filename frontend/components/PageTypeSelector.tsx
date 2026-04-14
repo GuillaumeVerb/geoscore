@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { patchJson } from "@/lib/api";
 import type { ScanStatus } from "@/types/scan";
@@ -31,6 +31,7 @@ export function PageTypeSelector({
   onLocalPageType,
   onAfterPatchSuccess,
 }: Props) {
+  const selectId = useId();
   const [value, setValue] = useState(current ?? "other");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export function PageTypeSelector({
   }
 
   return (
-    <section className="card">
+    <section className="card" aria-busy={pending}>
       <h2 className="h2">Page type override</h2>
       <p className="muted small">
         {apiEnabled
@@ -66,11 +67,14 @@ export function PageTypeSelector({
           : "Demo mode: applies locally only (no API)."}
       </p>
       <div className="row">
+        <label htmlFor={selectId} className="label visuallyHidden">
+          Page type
+        </label>
         <select
+          id={selectId}
           className="input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          aria-label="Page type"
         >
           {PAGE_TYPES.map((p) => (
             <option key={p} value={p}>
@@ -78,11 +82,21 @@ export function PageTypeSelector({
             </option>
           ))}
         </select>
-        <button type="button" className="button secondary" onClick={apply} disabled={pending}>
+        <button
+          type="button"
+          className="button secondary"
+          onClick={apply}
+          disabled={pending}
+          aria-label={pending ? "Applying page type, please wait" : "Apply page type override"}
+        >
           {pending ? "…" : "Apply"}
         </button>
       </div>
-      {error ? <p className="error">{error}</p> : null}
+      {error ? (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      ) : null}
     </section>
   );
 }

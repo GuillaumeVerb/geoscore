@@ -1,9 +1,11 @@
 type Props = {
   url?: string;
   summary?: string | null;
+  /** When false, omit the URL line (e.g. when the hero already shows it). */
+  showSubmittedUrl?: boolean;
 };
 
-export function SummaryCard({ url, summary }: Props) {
+export function SummaryCard({ url, summary, showSubmittedUrl = true }: Props) {
   return (
     <section className="card" aria-labelledby="summary-heading">
       <h2 className="h2" id="summary-heading">
@@ -17,7 +19,7 @@ export function SummaryCard({ url, summary }: Props) {
           or optional LLM).
         </p>
       )}
-      {url ? (
+      {showSubmittedUrl && url ? (
         <p className="mono small" style={{ marginTop: "0.75rem", marginBottom: 0 }}>
           <span className="muted">URL:</span> {url}
         </p>

@@ -1,5 +1,25 @@
 /** Mirrors backend ScanDetailResponse / PublicReportResponse for UI scaffolding. */
 
+/** Row from GET /api/scans (dashboard). */
+export type ScanSummary = {
+  scan_id: string;
+  status: string;
+  submitted_url: string;
+  domain: string;
+  page_type_detected?: string | null;
+  page_type_final?: string | null;
+  analysis_confidence?: string | null;
+  global_score?: number | null;
+  seo_score?: number | null;
+  geo_score?: number | null;
+  created_at: string;
+  completed_at?: string | null;
+  /** Assigned project (V2). */
+  project_id?: string | null;
+  /** Set when this scan is a rescan of a parent run. */
+  parent_scan_id?: string | null;
+};
+
 export type ScanStatus = {
   scan_id: string;
   status: string;
@@ -57,6 +77,8 @@ export type PublicReport = {
   seo_score?: number | null;
   geo_score?: number | null;
   scores?: Record<string, unknown> | null;
+  /** Optional strengths (e.g. demo report or future API field). */
+  strengths?: string[];
   top_issues: ScanIssue[];
   top_fixes: ScanRecommendation[];
   limitations: ScanLimitation[];

@@ -1,46 +1,47 @@
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { ExampleDemoPublicReportLayout } from "@/components/ExampleDemoPublicReportLayout";
+import { CaptureQualityBanner } from "@/components/CaptureQualityBanner";
 import { IssuesList } from "@/components/IssuesList";
+import { LimitationsPanel } from "@/components/LimitationsPanel";
 import { MockDataBanner } from "@/components/MockDataBanner";
 import { PageTypeConfidenceCard } from "@/components/PageTypeConfidenceCard";
-import { RecommendationsList } from "@/components/RecommendationsList";
+import { RecommendationsSection } from "@/components/RecommendationsSection";
 import { ScoreHeader } from "@/components/ScoreHeader";
+import { ScoreMethodNote } from "@/components/ScoreMethodNote";
 import { SectionTitle } from "@/components/SectionTitle";
 import { SummaryCard } from "@/components/SummaryCard";
+import { SystemIssuesCard } from "@/components/SystemIssuesCard";
 import { loadPublicReport } from "@/lib/loadScan";
-import type { PublicReport, ScanStatus } from "@/types/scan";
+import { scanStatusFromPublicReport } from "@/lib/publicReportMapper";
+import {
+  hasDegradationLimitations,
+  orderRecommendationsForDisplay,
+  partitionIssues,
+} from "@/lib/scanPresentation";
+import type { PublicReport } from "@/types/scan";
 
-type Props = { publicId: string };
+export type PublicReportPresentation = "shared" | "exampleDemo";
 
-function reportToScanShape(report: PublicReport): ScanStatus {
-  return {
-    scan_id: report.scan_id,
-    status: "public",
-    page_type_detected: report.page_type,
-    page_type_final: report.page_type,
-    analysis_confidence: report.analysis_confidence,
-    global_score: report.global_score,
-    seo_score: report.seo_score,
-    geo_score: report.geo_score,
-    strengths: [],
-    issues: report.top_issues,
-    recommendations: report.top_fixes,
-    limitations: report.limitations,
-    summary: report.summary,
-    meta: report.meta,
-  };
-}
+type Props = {
+  publicId: string;
+  /** Polished marketing layout for `/report/demo-example` only. */
+  presentation?: PublicReportPresentation;
+};
 
-export function PublicReportView({ publicId }: Props) {
+export function PublicReportView({ publicId, presentation = "shared" }: Props) {
   const searchParams = useSearchParams();
   const urlHint = searchParams.get("url") ?? undefined;
 
   const [report, setReport] = useState<PublicReport | null>(null);
   const [source, setSource] = useState<"api" | "mock" | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const isExampleDemo = presentation === "exampleDemo";
 
   useEffect(() => {
     let cancelled = false;
@@ -59,17 +60,37 @@ export function PublicReportView({ publicId }: Props) {
 
   if (loading || !report || !source) {
     return (
-      <main className="resultMain">
-        <p className="muted">Loading public report…</p>
+      <main className="resultMain" aria-busy="true" aria-label="Shared report">
+        <p className="muted" role="status" aria-live="polite">
+          Loading shared report…
+        </p>
       </main>
     );
   }
 
-  const scan = reportToScanShape(report);
+  if (isExampleDemo) {
+    return <ExampleDemoPublicReportLayout report={report} source={source} />;
+  }
+
+  const scan = scanStatusFromPublicReport(report);
+  const lims = report.limitations ?? [];
+  const degraded = hasDegradationLimitations(lims);
+  const emphasizeConfidence = degraded || (report.analysis_confidence ?? "").toLowerCase() === "low";
+  const { system: systemIssues, content: contentIssues } = partitionIssues(report.top_issues ?? []);
+  const orderedRecs = orderRecommendationsForDisplay(report.top_fixes ?? [], {
+    partial: degraded,
+    hasDegradationLimitations: degraded,
+  });
 
   return (
     <main className="resultMain">
-      {source === "mock" ? <MockDataBanner message="Demo public report — API offline or unknown id." /> : null}
+      {source === "mock" ? <MockDataBanner message="Demo public report — live service unreachable or unknown link." /> : null}
+
+      <nav className="resultNavCrumb muted" aria-label="Shared report navigation">
+        <Link href="/">Home</Link>
+        <span aria-hidden="true"> · </span>
+        <Link href="/dashboard">Recent scans</Link>
+      </nav>
 
       <header className="resultHeader">
         <h1 className="resultTitle">Shared report</h1>
@@ -78,39 +99,33 @@ export function PublicReportView({ publicId }: Props) {
         {report.analyzed_at ? <p className="small muted">Analyzed: {report.analyzed_at}</p> : null}
       </header>
 
-      <section className="card block" aria-labelledby="pub-scores">
-        <SectionTitle id="pub-scores">Scores</SectionTitle>
+      <section className="card block" aria-labelledby="pub-overview">
+        <SectionTitle id="pub-overview">Scores</SectionTitle>
+        <div className="resultScoreStatusMeta" style={{ marginBottom: "0.5rem" }}>
+          <span className="statusPill statusPill--final">Shared snapshot</span>
+        </div>
         <ScoreHeader scan={scan} />
+        <ScoreMethodNote source={source} meta={report.meta} compact />
       </section>
 
-      <PageTypeConfidenceCard scan={scan} />
+      <CaptureQualityBanner visible={degraded} />
 
       <SummaryCard url={report.submitted_url} summary={report.summary} />
 
-      <section className="card block">
-        <SectionTitle>Issues</SectionTitle>
-        <IssuesList issues={report.top_issues} variant="plain" />
+      <LimitationsPanel limitations={lims} prominent={degraded} />
+
+      <PageTypeConfidenceCard scan={scan} emphasizeConfidence={emphasizeConfidence} />
+
+      <SystemIssuesCard issues={systemIssues} />
+
+      <section className="card block" aria-labelledby="pub-issues">
+        <SectionTitle id="pub-issues">Top SEO &amp; GEO issues</SectionTitle>
+        <IssuesList issues={contentIssues} variant="plain" showSeverity />
       </section>
 
-      <section className="card block">
-        <SectionTitle>Recommendations</SectionTitle>
-        <RecommendationsList items={report.top_fixes} variant="plain" />
-      </section>
-
-      <section className="card block">
-        <SectionTitle>Limitations</SectionTitle>
-        {report.limitations.length ? (
-          <ul className="list">
-            {report.limitations.map((l) => (
-              <li key={l.code}>
-                {l.message}
-                {l.severity ? <span className="muted"> ({l.severity})</span> : null}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="muted">No limitations listed.</p>
-        )}
+      <section className="card block" aria-labelledby="pub-recs">
+        <SectionTitle id="pub-recs">Top recommendations</SectionTitle>
+        <RecommendationsSection items={orderedRecs} groupSystemFirst={degraded} />
       </section>
     </main>
   );

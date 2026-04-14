@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { AuthNav } from "@/components/AuthNav";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GeoScore",
-  description: "Minimal SEO & GEO analyzer",
+  title: { default: "GeoScore", template: "%s · GeoScore" },
+  description:
+    "Paste a URL. Get a serious SEO & GEO score — explainable issues, prioritized fixes, and clear confidence.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -13,14 +16,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div className="shell">
+          <a href="#main-content" className="skipLink">
+            Skip to main content
+          </a>
           <nav className="nav" aria-label="Main">
             <Link href="/" className="brand">
               GeoScore
             </Link>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/pricing">Pricing</Link>
+            <Link href="/dashboard" className="navLink">
+              Recent scans
+            </Link>
+            <Link href="/pricing" className="navLink">
+              Pricing
+            </Link>
+            <Link href="/how-it-works" className="navLink">
+              How scoring works
+            </Link>
+            <span className="navAuth">
+              <AuthNav />
+            </span>
           </nav>
-          {children}
+          <div id="main-content" tabIndex={-1} className="mainContent">
+            {children}
+          </div>
         </div>
       </body>
     </html>

@@ -40,6 +40,7 @@ from app.services.pipeline.render_fallback_decision import (
     should_trigger_playwright_fallback,
     visible_text_metrics,
 )
+from app.services.degraded_capture_fallback import enrich_score_bundle_for_degraded_capture
 from app.services.pipeline.score_minimal import run_deterministic_score
 
 logger = logging.getLogger(__name__)
@@ -347,6 +348,13 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
         http_status=out.http_status,
         partial=partial_for_score,
     )
+    enrich_score_bundle_for_degraded_capture(
+        score_bundle,
+        is_partial=partial_for_score,
+        pipeline_context=extraction_payload.get("pipeline_context")
+        if isinstance(extraction_payload.get("pipeline_context"), dict)
+        else None,
+    )
 
     # --- aggregating ---
     scan.status = ScanStatus.AGGREGATING.value
@@ -521,6 +529,13 @@ def rescore_scan_only(db: Session, scan_id: UUID) -> bool:
         fetch_ok=fetch_ok,
         http_status=fr.http_status if fr else None,
         partial=partial,
+    )
+    enrich_score_bundle_for_degraded_capture(
+        score_bundle,
+        is_partial=partial,
+        pipeline_context=score_payload.get("pipeline_context")
+        if isinstance(score_payload.get("pipeline_context"), dict)
+        else None,
     )
 
     scan.status = ScanStatus.AGGREGATING.value

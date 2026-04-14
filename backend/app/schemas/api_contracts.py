@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
 from app.domain.enums import AnalysisConfidence, PageType, ScanStatus
 from app.schemas.extraction import ExtractionSchema
@@ -11,6 +12,23 @@ from app.schemas.issue import Issue
 from app.schemas.limitation import Limitation
 from app.schemas.recommendation import Recommendation
 from app.schemas.score import ScoreBlock
+
+
+class SessionCreateRequest(BaseModel):
+    """MVP sign-in: email only (no magic-link delivery in this milestone)."""
+
+    email: EmailStr
+
+
+class UserSummary(BaseModel):
+    id: uuid.UUID
+    email: str
+
+
+class SessionResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserSummary
 
 
 class ScanCreateRequest(BaseModel):
@@ -29,6 +47,31 @@ class ScanResponse(BaseModel):
     status: ScanStatus
     submitted_url: str
     normalized_url: str
+
+
+class ScanSummaryItem(BaseModel):
+    """Light row for GET /api/scans — dashboard / history."""
+
+    scan_id: uuid.UUID
+    status: ScanStatus
+    submitted_url: str
+    domain: str
+    page_type_detected: PageType | None = None
+    page_type_final: PageType | None = None
+    analysis_confidence: AnalysisConfidence | None = None
+    global_score: float | None = None
+    seo_score: float | None = None
+    geo_score: float | None = None
+    created_at: datetime
+    completed_at: datetime | None = None
+    project_id: uuid.UUID | None = None
+    parent_scan_id: uuid.UUID | None = None
+
+
+class ScansListResponse(BaseModel):
+    """Returned by GET /api/scans."""
+
+    scans: list[ScanSummaryItem] = Field(default_factory=list)
 
 
 class ScanDetailResponse(BaseModel):
@@ -69,6 +112,27 @@ class RescanResponse(BaseModel):
     scan_id: uuid.UUID
     parent_scan_id: uuid.UUID
     status: ScanStatus
+
+
+class ScanCompareScores(BaseModel):
+    global_score: float | None = None
+    seo_score: float | None = None
+    geo_score: float | None = None
+
+
+class ScanCompareResponse(BaseModel):
+    """Before/after presentation for a rescan pair (parent = before, child = after)."""
+
+    parent_scan_id: uuid.UUID
+    child_scan_id: uuid.UUID
+    submitted_url: str
+    before_scores: ScanCompareScores
+    after_scores: ScanCompareScores
+    resolved_issues: list[Issue] = Field(default_factory=list)
+    new_issues: list[Issue] = Field(default_factory=list)
+    recommendations_persistent: list[Recommendation] = Field(default_factory=list)
+    recommendations_new: list[Recommendation] = Field(default_factory=list)
+    recommendations_removed: list[Recommendation] = Field(default_factory=list)
 
 
 class PageTypeOverrideRequest(BaseModel):

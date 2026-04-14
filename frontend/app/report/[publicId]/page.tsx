@@ -9,8 +9,10 @@ export default async function PublicReportPage({ params }: Props) {
   return (
     <Suspense
       fallback={
-        <main className="resultMain">
-          <p className="muted">Loading…</p>
+        <main className="resultMain" aria-busy="true" aria-label="Shared report">
+          <p className="muted" role="status" aria-live="polite">
+            Loading shared report…
+          </p>
         </main>
       }
     >

@@ -1,16 +1,31 @@
-import { UrlSubmitForm } from "@/components/UrlSubmitForm";
+import type { Metadata } from "next";
+
+import { LandingAnalyzeSection } from "@/components/landing/LandingAnalyzeSection";
+import { LandingFooterCta } from "@/components/landing/LandingFooterCta";
+import { LandingHero } from "@/components/landing/LandingHero";
+import { LandingResultPreview } from "@/components/landing/LandingResultPreview";
+import { LandingTrust } from "@/components/landing/LandingTrust";
+import { LandingValuePillars } from "@/components/landing/LandingValuePillars";
+import { LandingWhySeoGeo } from "@/components/landing/LandingWhySeoGeo";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "GeoScore — SEO & GEO analyzer",
+  },
+  description:
+    "Paste a URL. Get a serious SEO & GEO score. Understand whether a page is ready to rank, be understood, and be cited in modern search environments.",
+};
 
 export default function HomePage() {
   return (
-    <main>
-      <h1 className="homeTitle">Analyze one page</h1>
-      <p className="lead muted homeLead">
-        One URL, one flow, one clear score — GEO + SEO readiness without the bloat.
-      </p>
-      <UrlSubmitForm />
-      <p className="small muted homeFootnote">
-        If the API is offline, you&apos;ll still see a full placeholder result using demo data.
-      </p>
+    <main className="landing">
+      <LandingHero />
+      <LandingAnalyzeSection />
+      <LandingValuePillars />
+      <LandingWhySeoGeo />
+      <LandingResultPreview />
+      <LandingTrust />
+      <LandingFooterCta />
     </main>
   );
 }

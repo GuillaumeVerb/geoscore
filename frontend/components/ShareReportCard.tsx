@@ -35,18 +35,19 @@ export function ShareReportCard({ scanId, apiEnabled = true, onAfterCreate }: Pr
   }
 
   return (
-    <section className="card">
+    <section className="card" aria-busy={loading}>
       <h2 className="h2">Share</h2>
       <button
         type="button"
         className="button secondary"
         onClick={enableShare}
         disabled={loading || !apiEnabled}
-        title={!apiEnabled ? "Requires API" : undefined}
+        title={!apiEnabled ? "Not available with offline demo data" : undefined}
+        aria-label={loading ? "Creating public link, please wait" : "Create shareable public report link"}
       >
         {loading ? "…" : "Create public link"}
       </button>
-      {!apiEnabled ? <p className="small muted">Public links require a connected API.</p> : null}
+      {!apiEnabled ? <p className="small muted">Public links aren&apos;t available with offline demo data.</p> : null}
       {publicPath ? (
         <p className="mono small">
           Open:{" "}
@@ -55,7 +56,11 @@ export function ShareReportCard({ scanId, apiEnabled = true, onAfterCreate }: Pr
           </Link>
         </p>
       ) : null}
-      {error ? <p className="error">{error}</p> : null}
+      {error ? (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      ) : null}
     </section>
   );
 }

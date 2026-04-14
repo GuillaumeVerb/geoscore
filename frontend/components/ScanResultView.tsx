@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -18,6 +19,7 @@ export function ScanResultView({ scanId }: Props) {
   const [scan, setScan] = useState<ScanStatus | null>(null);
   const [source, setSource] = useState<DataSource | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const mounted = useRef(true);
 
@@ -53,12 +55,22 @@ export function ScanResultView({ scanId }: Props) {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    loadScanDetail(scanId, urlHint).then(({ scan: s, source: src }) => {
-      if (cancelled || !mounted.current) return;
-      setScan(s);
-      setSource(src);
-      setLoading(false);
-    });
+    setLoadError(null);
+    loadScanDetail(scanId, urlHint)
+      .then(({ scan: s, source: src }) => {
+        if (cancelled || !mounted.current) return;
+        setScan(s);
+        setSource(src);
+        setLoading(false);
+      })
+      .catch((e: unknown) => {
+        if (cancelled || !mounted.current) return;
+        const msg = e instanceof Error ? e.message : "Could not load scan.";
+        setLoadError(msg);
+        setScan(null);
+        setSource(null);
+        setLoading(false);
+      });
     return () => {
       cancelled = true;
     };
@@ -87,10 +99,35 @@ export function ScanResultView({ scanId }: Props) {
     return () => window.clearInterval(id);
   }, [source, scan?.status, scanId]);
 
-  if (loading || !scan || !source) {
+  if (loadError) {
+    const returnTo = encodeURIComponent(`/scan/${scanId}`);
     return (
       <main className="resultMain">
-        <p className="muted">Loading result…</p>
+        <h1 className="resultTitle">Scan unavailable</h1>
+        <p className="error" role="alert">
+          {loadError}
+        </p>
+        <p className="muted small" style={{ marginBottom: "1rem", maxWidth: "34rem" }}>
+          You may need to sign in to view this scan, or it may not exist for your account.
+        </p>
+        <div className="row">
+          <Link href={`/sign-in?returnTo=${returnTo}`} className="button">
+            Sign in
+          </Link>
+          <Link href="/dashboard" className="button secondary">
+            Recent scans
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (loading || !scan || !source) {
+    return (
+      <main className="resultMain" aria-busy="true" aria-label="Scan result">
+        <p className="muted" role="status" aria-live="polite">
+          Loading scan…
+        </p>
       </main>
     );
   }

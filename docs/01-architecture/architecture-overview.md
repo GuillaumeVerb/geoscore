@@ -35,3 +35,9 @@
 - issue
 - recommendation
 - public report
+
+## Operations
+
+Local run, env vars, mock vs Postgres, auth, and post-deploy checks: see **`README.md`** and **`docs/03-build/verify-deployment.md`**.
+
+Release planning (P0 / P1 / P2), readiness probes, and what to defer: **`docs/03-build/release-readiness.md`**.

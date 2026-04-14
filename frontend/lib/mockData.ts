@@ -5,6 +5,9 @@
 
 import type { PublicReport, ScanIssue, ScanLimitation, ScanRecommendation, ScanStatus } from "@/types/scan";
 
+/** Public id for the marketing / demo shared report (`/report/demo-example`). */
+export const DEMO_EXAMPLE_PUBLIC_ID = "demo-example";
+
 const MOCK_ISSUES: ScanIssue[] = [
   {
     code: "META_DESC_MISSING",
@@ -96,8 +99,61 @@ export function buildMockScanDetail(scanId: string, urlHint?: string): ScanStatu
   };
 }
 
+const DEMO_STRENGTHS = [
+  "Reasonable title length",
+  "HTTPS in use",
+  "Mobile viewport present",
+];
+
+function buildDemoExamplePublicReport(submitted: string): PublicReport {
+  return {
+    public_id: DEMO_EXAMPLE_PUBLIC_ID,
+    scan_id: "demo-example-scan",
+    submitted_url: submitted,
+    page_type: "landing_page",
+    analysis_confidence: "medium",
+    global_score: 72,
+    seo_score: 74,
+    geo_score: 70,
+    strengths: [...DEMO_STRENGTHS],
+    scores: {
+      seo_subscores: {
+        technical: 78,
+        on_page: 73,
+        structure: 74,
+      },
+      geo_subscores: {
+        clarity: 71,
+        extractability: 69,
+        citation_readiness: 71,
+      },
+    },
+    top_issues: MOCK_ISSUES.slice(0, 2),
+    top_fixes: MOCK_RECOMMENDATIONS.slice(0, 2),
+    limitations: [
+      {
+        code: "EXAMPLE_REPORT",
+        message:
+          "Fixed scores and notes so you can explore the report layout. Run GeoScore on your own URL for a live analysis tied to your page.",
+        severity: "info",
+      },
+    ],
+    summary:
+      "This page already covers baseline hygiene—HTTPS, a usable title length, and a mobile viewport—which helps both classic ranking signals and machine-readable structure. The clearest wins are snippet-level SEO (a stronger meta description) and a sharper H1 that states intent in plain language, so search and answer-style surfaces can anchor on one obvious topic.",
+    analyzed_at: new Date().toISOString(),
+    meta: {
+      scoring_version: "scoring-v1-cal03",
+      ruleset_version: "ruleset-v1-cal03",
+      llm_prompt_version: null,
+    },
+  };
+}
+
 export function buildMockPublicReport(publicId: string, urlHint?: string): PublicReport {
   const { submitted } = defaultUrl(urlHint);
+  if (publicId === DEMO_EXAMPLE_PUBLIC_ID) {
+    return buildDemoExamplePublicReport(submitted);
+  }
   return {
     public_id: publicId,
     scan_id: "mock-scan",

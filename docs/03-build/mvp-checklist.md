@@ -1,10 +1,13 @@
 # MVP checklist
 
+**RC / release:** treat unchecked items here as a **historical product backlog**, not a hard gate. Ship readiness follows **`release-readiness.md`**, **`verify-deployment.md`**, and **`release-candidate-checklist.md`**. Billing / plan rows below are **explicitly deferred** (see `release-readiness.md` P2).
+
 ## Product
 - [ ] One clear homepage with URL input
 - [ ] One scan flow from submission to result
 - [ ] One result page with scores and fixes
 - [ ] Product remains simple and focused
+- [ ] **Clarity / credibility:** see **`docs/00-product/product-strengthening-plan.md`** (how-it-works, method note on scores).
 
 ## Backend
 - [ ] FastAPI app bootstrapped
@@ -63,3 +66,10 @@
 - [ ] No black-box behavior
 - [ ] No silent partial analysis
 - [ ] Naming matches docs
+
+## Operations (ship readiness)
+
+- **Plan:** **`docs/03-build/release-readiness.md`** — P0 / P1 / P2, CI, `/ready`, migrations path, explicit deferrals.
+- **Manual verify:** **`docs/03-build/verify-deployment.md`** (health, **ready**, sign-in, scan, dashboard, public report, demo page).
+- **Migrations:** **`docs/03-build/database-migrations.md`** — Alembic baseline, `upgrade` / `stamp`, new revisions.
+- Keep env templates (`backend/.env.example`, `frontend/.env.example`) aligned with `README.md` when adding new configuration.

@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from app.domain.enums import AnalysisConfidence, PageType, ScanStatus
@@ -15,7 +15,7 @@ from app.models.scan_extraction import ScanExtraction
 from app.models.scan_issue import ScanIssue
 from app.models.scan_recommendation import ScanRecommendation
 from app.models.scan_score import ScanScore
-from app.schemas.api_contracts import PublicReportResponse, ScanDetailResponse
+from app.schemas.api_contracts import PublicReportResponse, ScanDetailResponse, ScanSummaryItem
 from app.schemas.extraction import ExtractionSchema
 from app.schemas.issue import Issue
 from app.schemas.limitation import Limitation
@@ -46,6 +46,50 @@ def _parse_scan_status(value: str) -> ScanStatus:
         return ScanStatus(value)
     except ValueError:
         return ScanStatus.QUEUED
+
+
+def list_scan_summaries(
+    db: Session, *, user_id: UUID, limit: int = 40, project_id: UUID | None = None
+) -> list[ScanSummaryItem]:
+    """Newest scans first for this user; scores from latest ScanScore row per scan."""
+    q = select(Scan).where(Scan.user_id == user_id)
+    if project_id is not None:
+        q = q.where(Scan.project_id == project_id)
+    scans = db.scalars(q.order_by(desc(Scan.created_at)).limit(limit)).all()
+    out: list[ScanSummaryItem] = []
+    for scan in scans:
+        score_row = (
+            db.execute(
+                select(ScanScore)
+                .where(ScanScore.scan_id == scan.id)
+                .order_by(desc(ScanScore.created_at))
+                .limit(1)
+            )
+            .scalars()
+            .first()
+        )
+        global_score = float(score_row.global_score) if score_row and score_row.global_score is not None else None
+        seo_score = float(score_row.seo_score) if score_row and score_row.seo_score is not None else None
+        geo_score = float(score_row.geo_score) if score_row and score_row.geo_score is not None else None
+        out.append(
+            ScanSummaryItem(
+                scan_id=scan.id,
+                status=_parse_scan_status(scan.status),
+                submitted_url=scan.submitted_url,
+                domain=scan.domain,
+                page_type_detected=_parse_page_type(scan.page_type_detected),
+                page_type_final=_parse_page_type(scan.page_type_final),
+                analysis_confidence=_parse_confidence(scan.analysis_confidence),
+                global_score=global_score,
+                seo_score=seo_score,
+                geo_score=geo_score,
+                created_at=scan.created_at,
+                completed_at=scan.completed_at,
+                project_id=scan.project_id,
+                parent_scan_id=scan.parent_scan_id,
+            )
+        )
+    return out
 
 
 def scan_to_detail_response(db: Session, scan_id: UUID) -> ScanDetailResponse | None:
@@ -160,6 +204,8 @@ def scan_to_detail_response(db: Session, scan_id: UUID) -> ScanDetailResponse | 
     }
     if scan.parent_scan_id:
         meta["parent_scan_id"] = str(scan.parent_scan_id)
+    if scan.project_id:
+        meta["project_id"] = str(scan.project_id)
 
     return ScanDetailResponse(
         scan_id=scan.id,
