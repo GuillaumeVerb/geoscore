@@ -45,7 +45,7 @@ Focused check for **Projects** + **Compare to previous run** only (no new featur
 
 ## Scripts
 
-**RC sign-off (humain):** après déploiement ou env prod-like, enchaîner **`release-candidate-checklist.md`** (bug bash §2 + §3 URLs) une fois la **Full manual smoke** ci-dessous passée.
+**RC sign-off (manual):** after deploy (or prod-like env), run **`release-candidate-checklist.md`** (bug bash §2 + §3 URL pass) once **Full manual smoke** below has passed.
 
 - Backend unit tests (from `backend/`): `python -m pytest -q`
 - Frontend typecheck: `npm run typecheck` (in `frontend/`)
