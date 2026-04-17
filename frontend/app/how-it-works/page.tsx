@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { RULESET_VERSION_LABEL, SCORING_VERSION_LABEL } from "@/lib/productCopy";
-
 export const metadata: Metadata = {
   title: "How scoring works",
   description:
@@ -50,10 +48,8 @@ export default function HowItWorksPage() {
         <p className="muted">
           Scoring is <strong>rules-first and deterministic</strong> for the core engine. Optional LLM steps are{" "}
           <strong>bounded</strong>: they cannot silently override the whole score. You always see limitations and
-          confidence when the run is partial or constrained.
-        </p>
-        <p className="small muted mono" style={{ marginTop: "0.75rem", marginBottom: 0 }}>
-          Current release: {SCORING_VERSION_LABEL} · {RULESET_VERSION_LABEL}
+          confidence when the run is partial or constrained. Exact scoring and ruleset versions appear on each result
+          (and public report) so a score stays traceable.
         </p>
       </section>
 

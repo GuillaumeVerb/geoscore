@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { LandingAnalyzeSection } from "@/components/landing/LandingAnalyzeSection";
 import { LandingFooterCta } from "@/components/landing/LandingFooterCta";
 import { LandingHero } from "@/components/landing/LandingHero";
+import { LandingRepeatUseSection } from "@/components/landing/LandingRepeatUseSection";
 import { LandingResultPreview } from "@/components/landing/LandingResultPreview";
 import { LandingTrust } from "@/components/landing/LandingTrust";
 import { LandingValuePillars } from "@/components/landing/LandingValuePillars";
@@ -24,6 +25,7 @@ export default function HomePage() {
       <LandingValuePillars />
       <LandingWhySeoGeo />
       <LandingResultPreview />
+      <LandingRepeatUseSection />
       <LandingTrust />
       <LandingFooterCta />
     </main>

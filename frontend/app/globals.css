@@ -306,6 +306,220 @@ a.button {
   max-width: 40rem;
 }
 
+.pricingCtas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.pricingCallout {
+  margin: 0;
+  max-width: 40rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--fg);
+}
+
+.pricingMatrixSectionTitle {
+  margin: 1.35rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.pricingMatrixSectionLead {
+  margin: 0 0 0.5rem;
+  max-width: 40rem;
+}
+
+.pricingTableWrap {
+  margin-top: 0.35rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.pricingMatrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.pricingMatrix th,
+.pricingMatrix td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+.pricingMatrix thead th {
+  font-weight: 600;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+}
+
+.pricingMatrixCorner {
+  width: 38%;
+  min-width: 9rem;
+}
+
+.pricingMatrixPlan {
+  width: 20%;
+  min-width: 4.5rem;
+  text-align: center;
+}
+
+.pricingMatrix tbody tr:nth-child(even) td,
+.pricingMatrix tbody tr:nth-child(even) th {
+  background: #fafafa;
+}
+
+.pricingMatrix tbody td {
+  text-align: center;
+}
+
+.pricingMatrix tbody th {
+  font-weight: 500;
+  color: var(--muted);
+  text-align: left;
+}
+
+.pricingMatrixMetaRow th,
+.pricingMatrixMetaRow td {
+  border-bottom: none;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.landingRepeat {
+  margin-top: 2.75rem;
+}
+
+.landingRepeatGrid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (min-width: 560px) {
+  .landingRepeatGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.landingRepeatCard {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.05rem;
+  background: #fff;
+}
+
+.landingRepeatCardTitle {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.landingRepeatCardBody {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.landingBeforeStrip {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.05rem;
+  background: #fff;
+}
+
+.landingBeforeStripLabel {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.landingBeforeStripHint {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.landingBeforeFlow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+}
+
+.landingBeforeCard {
+  flex: 1 1 140px;
+  min-width: 132px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+  background: var(--bg);
+}
+
+.landingBeforeCard--next {
+  border-style: solid;
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.landingBeforeCardTag {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+
+.landingBeforeScores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.85rem;
+}
+
+.landingBeforeScoreLabel {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.12rem;
+}
+
+.landingBeforeScoreVal {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.landingBeforeArrow {
+  font-size: 1.1rem;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+.landingBeforeFoot {
+  margin: 0.75rem 0 0;
+}
+
 .resultNavCrumb {
   margin: 0 0 0.75rem;
   font-size: 0.875rem;
