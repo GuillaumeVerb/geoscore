@@ -111,8 +111,13 @@ function ScanRow({ scan }: { scan: ScanSummary }) {
           Open result
         </Link>
         {showCompare ? (
-          <Link href={`/scan/${scan.scan_id}/compare`} className="button secondary small">
-            Compare runs
+          <Link
+            href={`/scan/${scan.scan_id}/compare`}
+            className="button secondary small"
+            title="Compare to previous run"
+            aria-label={`Compare to previous run for ${title}`}
+          >
+            Compare
           </Link>
         ) : null}
       </p>

@@ -151,7 +151,11 @@ export function ResultShell({
         <div className="row">
           <RescanButton scanId={routeScanId} apiEnabled={apiEnabled} onAfterRescan={onRefetchScan} />
           {hasParentForCompare ? (
-            <Link href={`/scan/${routeScanId}/compare`} className="button secondary">
+            <Link
+              href={`/scan/${routeScanId}/compare`}
+              className="button secondary"
+              title="Side-by-side scores and issues with the previous run"
+            >
               Compare to previous run
             </Link>
           ) : null}

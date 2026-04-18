@@ -13,8 +13,8 @@ export function LandingFooterCta() {
         <a className="button" href="#analyze" aria-label="Analyze a URL: go to the URL input form">
           Analyze a URL
         </a>
-        <Link className="button secondary" href="/report/demo-example">
-          See example report
+        <Link className="button secondary" href="/report/demo-example" aria-label="Open example public report">
+          Example report
         </Link>
       </div>
     </section>

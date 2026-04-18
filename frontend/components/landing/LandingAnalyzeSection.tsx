@@ -23,6 +23,9 @@ export function LandingAnalyzeSection() {
           <span aria-hidden="true"> · </span>
           <Link href="/report/demo-example">Example report</Link>
         </p>
+        <p className="small muted landingInputHint" style={{ marginTop: "0.4rem" }}>
+          Signed in: history, <strong>projects</strong>, <strong>rescan</strong>, then <strong>compare to previous run</strong>.
+        </p>
       </div>
     </section>
   );

@@ -24,6 +24,8 @@ export function LandingHero() {
         <Link href="/how-it-works">How scoring works</Link>
         <span aria-hidden="true"> · </span>
         <span>Deterministic rules first — explainable scores</span>
+        <span aria-hidden="true"> · </span>
+        <span>Projects &amp; compare when signed in</span>
       </p>
     </header>
   );

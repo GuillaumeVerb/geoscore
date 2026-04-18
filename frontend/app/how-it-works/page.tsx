@@ -38,6 +38,10 @@ export default function HowItWorksPage() {
             <strong>Limitations</strong> — when capture was partial or signals were thin, we say so instead of faking
             precision.
           </li>
+          <li>
+            <strong>Iteration (signed in)</strong> — dashboard history, <strong>projects</strong>,{" "}
+            <strong>rescan</strong>, then <strong>compare to previous run</strong> to see whether a change helped.
+          </li>
         </ul>
       </section>
 

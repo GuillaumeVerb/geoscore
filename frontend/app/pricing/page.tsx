@@ -35,7 +35,10 @@ export default function PricingPage() {
       </p>
 
       <h2 className="h2 pricingMatrixSectionTitle">Target packaging</h2>
-      <p className="small muted pricingMatrixSectionLead">Same features across tiers where listed; plans differ by volume and history depth.</p>
+      <p className="small muted pricingMatrixSectionLead">
+        Same features across tiers where listed; plans differ by volume and history depth. Nothing here is enforced until
+        billing ships.
+      </p>
 
       <div className="pricingTableWrap">
         <table className="pricingMatrix">

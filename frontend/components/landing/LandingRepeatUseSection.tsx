@@ -24,10 +24,10 @@ export function LandingRepeatUseSection() {
           </p>
         </div>
         <div className="landingRepeatCard">
-          <h3 className="landingRepeatCardTitle">Compare</h3>
+          <h3 className="landingRepeatCardTitle">Compare to previous run</h3>
           <p className="landingRepeatCardBody">
-            After a rescan, open the compare view: Global, SEO, and GEO scores plus issues side by side with the prior
-            run. It is a presentation diff on stored results — not a second hidden score engine.
+            After a rescan, open compare: Global, SEO, and GEO scores and issues side by side with the prior run — a
+            presentation diff on stored results, not a second score engine.
           </p>
         </div>
       </div>
@@ -76,8 +76,8 @@ export function LandingRepeatUseSection() {
           </div>
         </div>
         <p className="landingBeforeFoot muted small">
-          Flow: analyze → adjust the page → <Link href="/#analyze">rescan</Link> → open compare from the result or
-          dashboard.
+          Flow: analyze → adjust the page → <Link href="/#analyze">rescan</Link> → <strong>Compare to previous run</strong>{" "}
+          from the result or dashboard.
         </p>
       </div>
     </section>
