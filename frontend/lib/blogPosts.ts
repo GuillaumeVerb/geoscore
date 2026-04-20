@@ -3,6 +3,13 @@ export type BlogPostMeta = { slug: string; title: string; date: string; lede: st
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "confidence-limitations-read-diagnostic",
+    title: "Confidence and limitations: how to read a diagnostic honestly",
+    date: "2026-04-20",
+    lede:
+      "When to trust the headline scores, how partial scans show up, and why limitations next to the result are a feature — not an embarrassment.",
+  },
+  {
     slug: "homepage-readiness-bounded-checklist",
     title: "Homepage readiness: a bounded checklist (no enterprise crawl)",
     date: "2026-04-20",
