@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: { default: "GeoScore", template: "%s · GeoScore" },
   description:
     "Paste a URL. Get a serious SEO & GEO score — explainable issues, prioritized fixes, and clear confidence.",
+  /** Google Search Console — URL prefix property (HTML tag method). Override via env if the token rotates. */
+  verification: {
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim() ||
+      "2mLCmOGDw6WCtYQ9-Bco0WZHTFJfOoh2zrEH8hPDb74",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
