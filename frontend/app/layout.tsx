@@ -32,6 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/how-it-works" className="navLink">
               How scoring works
             </Link>
+            <Link href="/blog" className="navLink">
+              Blog
+            </Link>
             <span className="navAuth">
               <AuthNav />
             </span>

@@ -35,7 +35,7 @@
 
 - Billing, usage UI, email magic links.
 - Rewriting issue/reco catalog copy in the engine (would touch scoring/product pipeline).
-- Video walkthrough, blog, comparison pages.
+- Video walkthrough, blog (see **`blog-strategy.md`** for a disciplined, product-led framing), comparison pages.
 - Heavy onboarding tours.
 
 ---

@@ -1629,6 +1629,94 @@ a.button {
   }
 }
 
+/* Blog (product-led, minimal) */
+.blogIndex,
+.blogArticle {
+  max-width: 42rem;
+}
+
+.blogIndexHeader {
+  margin-bottom: 1.25rem;
+}
+
+.blogIndexLead {
+  margin: 0.35rem 0 0;
+  max-width: 38rem;
+  line-height: 1.55;
+}
+
+.blogPostList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.blogPostList li + li {
+  margin-top: 1rem;
+}
+
+.blogPostMeta {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.blogPostTitle {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.blogPostTitle a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blogPostTitle a:hover {
+  text-decoration: underline;
+}
+
+.blogPostRead {
+  margin: 0.65rem 0 0;
+  font-size: 0.9rem;
+}
+
+.blogIndexFooter {
+  margin-top: 1.5rem;
+}
+
+.blogArticleHeader {
+  margin-bottom: 1.25rem;
+}
+
+.blogByline {
+  margin: 0.35rem 0 0.85rem;
+}
+
+.blogDeck {
+  margin: 0;
+  max-width: 38rem;
+  line-height: 1.55;
+}
+
+.blogCrumbCurrent {
+  color: var(--muted);
+}
+
+.blogCta {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.blogCta .button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* How it works (product clarity) */
 .hiwArticle {
   max-width: 40rem;

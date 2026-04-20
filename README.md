@@ -149,6 +149,7 @@ Railway’s builder only sees **the service root directory**. If the root is the
 - `AGENTS.md` — product and scoring rules for agents.
 - `docs/00-product/product-strengthening-plan.md` — pre-release product quality (method, credibility, UX priorities).
 - `docs/00-product/roadmap-v2-v3.md` — disciplined V2 / V3 product roadmap (post–V1.5).
+- `docs/00-product/blog-strategy.md` — product-led blog framing; first post lives at **`/blog`** in the Next app.
 - `docs/01-architecture/architecture-overview.md`
 - `docs/03-build/release-readiness.md` — **P0 / P1 / P2** release plan and what ships vs deferred
 - `docs/03-build/verify-deployment.md` — post-setup checklist
