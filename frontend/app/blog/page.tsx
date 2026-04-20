@@ -1,28 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BLOG_POSTS } from "@/lib/blogPosts";
+
 export const metadata: Metadata = {
   title: "Blog",
   description:
     "Short, product-led notes on SEO, GEO, and single-page readiness — aligned with how GeoScore analyzes one URL.",
 };
-
-const POSTS: { slug: string; title: string; date: string; lede: string }[] = [
-  {
-    slug: "homepage-readiness-bounded-checklist",
-    title: "Homepage readiness: a bounded checklist (no enterprise crawl)",
-    date: "2026-04-20",
-    lede:
-      "A fast pass on one URL — structure, clarity, proof — without pretending a homepage check replaced a full-site audit.",
-  },
-  {
-    slug: "seo-vs-geo-one-page",
-    title: "SEO vs GEO: what actually changes for one page",
-    date: "2026-04-09",
-    lede:
-      "Two lenses on the same snapshot: classic search readiness vs how well the page can be understood, summarized, and cited.",
-  },
-];
 
 export default function BlogIndexPage() {
   return (
@@ -35,7 +20,7 @@ export default function BlogIndexPage() {
         </p>
       </header>
       <ul className="blogPostList">
-        {POSTS.map((p) => (
+        {BLOG_POSTS.map((p) => (
           <li key={p.slug}>
             <article className="card block blogPostCard">
               <p className="blogPostMeta">

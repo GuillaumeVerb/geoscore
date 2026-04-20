@@ -46,6 +46,7 @@ Next.js only loads `frontend/.env.local` (or `.env`); the root `.env.example` is
 ### Frontend variables
 
 - **`NEXT_PUBLIC_API_URL`** — Full API origin, **no trailing slash** (default `http://localhost:8000`). The browser calls the API from the user’s machine, so this must be reachable from the client (local dev or public HTTPS).
+- **`NEXT_PUBLIC_SITE_URL`** (optional but recommended on **production** Vercel) — Public **frontend** origin for **`/sitemap.xml`** and **`/robots.txt`** (`https://…`, no trailing slash). If unset, the app falls back to `VERCEL_URL` (fine for previews; set explicitly for your canonical domain).
 
 ## Run the backend
 
@@ -137,8 +138,9 @@ Railway’s builder only sees **the service root directory**. If the root is the
 1. Set **`ENVIRONMENT=production`**, **`JWT_SECRET_KEY`** (strong random), **`DATABASE_URL`**, **`USE_MOCK_WORKFLOW=false`** on the API host.
 2. Set **`CORS_ORIGINS`** to every frontend origin that will call the API (comma-separated, **exact** scheme + host + port). Include preview URLs if you use them. Missing origin → browser CORS errors (often mistaken for “API down”).
 3. On the frontend host (e.g. Vercel), set **`NEXT_PUBLIC_API_URL`** at **build** time to the **public** API base URL (**HTTPS** if the site is HTTPS). **No trailing slash.** The browser calls the API from the user’s machine — this must be reachable and must not be mixed-content (**https** page → **https** API).
-4. If the API host cannot run Playwright/Chromium, set **`PLAYWRIGHT_ENABLED=false`** on the backend (see `backend/.env.example`).
-5. **After deploy:** run the ordered checklist in **`docs/03-build/verify-deployment.md`** (section **Full manual smoke**), including **Short V2 smoke test** if you ship Projects + compare.
+4. On Vercel **production**, set **`NEXT_PUBLIC_SITE_URL`** to your canonical frontend URL (same rules: **HTTPS**, no trailing slash) so **`/sitemap.xml`** and **`/robots.txt`** point Google at the right host. Then submit the sitemap in Google Search Console.
+5. If the API host cannot run Playwright/Chromium, set **`PLAYWRIGHT_ENABLED=false`** on the backend (see `backend/.env.example`).
+6. **After deploy:** run the ordered checklist in **`docs/03-build/verify-deployment.md`** (section **Full manual smoke**), including **Short V2 smoke test** if you ship Projects + compare.
 
 ## Demo / example report
 
