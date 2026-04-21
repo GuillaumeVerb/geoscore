@@ -3,6 +3,13 @@ export type BlogPostMeta = { slug: string; title: string; date: string; lede: st
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "citation-ready-real-marketing-page",
+    title: "What “citation-ready” means on a real marketing page",
+    date: "2026-04-20",
+    lede:
+      "Clear intent, extractable structure, and on-page trust — without promising AI citations or collapsing GEO into hype.",
+  },
+  {
     slug: "confidence-limitations-read-diagnostic",
     title: "Confidence and limitations: how to read a diagnostic honestly",
     date: "2026-04-20",
