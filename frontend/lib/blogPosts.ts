@@ -3,6 +3,13 @@ export type BlogPostMeta = { slug: string; title: string; date: string; lede: st
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "pricing-pages-clarity-beats-keyword-stuffing",
+    title: "Pricing pages: clarity beats keyword stuffing",
+    date: "2026-04-21",
+    lede:
+      "One pricing URL: who it is for, what they get, what it costs — structured for buyers and for fair extraction, not for SEO theater.",
+  },
+  {
     slug: "citation-ready-real-marketing-page",
     title: "What “citation-ready” means on a real marketing page",
     date: "2026-04-20",
