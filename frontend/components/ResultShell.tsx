@@ -10,6 +10,7 @@ import { PageTypeSelector } from "@/components/PageTypeSelector";
 import { RecommendationsSection } from "@/components/RecommendationsSection";
 import { RescanButton } from "@/components/RescanButton";
 import { ResultScoreStatusHeader } from "@/components/ResultScoreStatusHeader";
+import { ScanRunFailurePanel } from "@/components/ScanRunFailurePanel";
 import { ScanStatusBanner } from "@/components/ScanStatusBanner";
 import { ScanStatusCard } from "@/components/ScanStatusCard";
 import { ScoreBreakdown } from "@/components/ScoreBreakdown";
@@ -120,6 +121,8 @@ export function ResultShell({
       </section>
 
       <ScanStatusBanner status={scan.status} errorCode={scan.error_code} errorMessage={scan.error_message} />
+
+      {isFailed ? <ScanRunFailurePanel errorCode={scan.error_code} /> : null}
 
       <SummaryCard url={urlDisplay} summary={scan.summary} />
 

@@ -117,7 +117,7 @@ function ScanRow({ scan }: { scan: ScanSummary }) {
             title="Compare to previous run"
             aria-label={`Compare to previous run for ${title}`}
           >
-            Compare
+            Compare to previous run
           </Link>
         ) : null}
       </p>
@@ -412,7 +412,7 @@ export function DashboardScanHistory() {
           <p className="muted" style={{ marginBottom: "1rem", maxWidth: "34rem" }}>
             {filterSelectValue
               ? "Run an analysis with the project selected above, or pick another project from the filter."
-              : "When you analyze URLs, they&apos;ll show up here with status and scores so you can jump back to any result."}
+              : "When you analyze URLs, they show up here with status and scores. After you change the page, use Rescan on a result, then open Compare to previous run to see what moved — still one URL at a time."}
           </p>
           {filterSelectValue ? (
             <button type="button" className="button secondary" onClick={() => onSelectProject(null)}>

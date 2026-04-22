@@ -28,11 +28,13 @@ from app.schemas.api_contracts import (
 from app.schemas.project import ProjectCreateRequest, ProjectRead, ProjectsListResponse
 from app.services.pipeline.orchestrator import rescore_scan_only, schedule_scan_pipeline
 from app.services.scan_compare import build_scan_compare
+from app.services.scan_create_rate_limit import check_scan_create_rate_limit
 from app.services.scan_detail import list_scan_summaries, public_report_to_response, scan_to_detail_response
 
 
 class PostgresScanWorkflow:
     def create_scan(self, body: ScanCreateRequest, *, user_id: UUID) -> ScanResponse:
+        check_scan_create_rate_limit(user_id)
         raw = str(body.url).strip()
         normalized_url, domain, path = normalize_submitted_url(raw)
         db = SessionLocal()
@@ -129,6 +131,7 @@ class PostgresScanWorkflow:
             db.close()
 
     def rescan_scan(self, scan_id: UUID, *, user_id: UUID) -> RescanResponse:
+        check_scan_create_rate_limit(user_id)
         db = SessionLocal()
         try:
             parent = db.get(Scan, scan_id)

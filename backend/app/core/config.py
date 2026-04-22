@@ -39,6 +39,8 @@ class Settings(BaseSettings):
     # HTTP: transient retries (connection error or 502/503/504).
     http_fetch_max_retries: int = 1
     http_timeout_sec: float = 25.0
+    # Max new scans + rescans per user per rolling minute, shared quota (in-process; Redis for multi-replica).
+    scan_create_per_minute: int = 30
     # Comma-separated hostnames (or *.domain.com): add extra seconds to HTTP timeout for slow origins.
     http_timeout_boost_hosts: str = ""
     http_host_extra_timeout_sec: float = 12.0

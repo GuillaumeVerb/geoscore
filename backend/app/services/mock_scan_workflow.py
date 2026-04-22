@@ -23,6 +23,7 @@ from app.schemas.api_contracts import (
 )
 from app.schemas.project import ProjectCreateRequest, ProjectRead, ProjectsListResponse
 from app.services.scan_compare import build_scan_compare
+from app.services.scan_create_rate_limit import check_scan_create_rate_limit
 
 
 def _owner_from_meta(meta: dict | None) -> UUID | None:
@@ -42,6 +43,7 @@ class MockScanWorkflow:
         self._projects_by_user: dict[UUID, list[ProjectRead]] = {}
 
     def create_scan(self, body: ScanCreateRequest, *, user_id: UUID) -> ScanResponse:
+        check_scan_create_rate_limit(user_id)
         if body.project_id is not None:
             owned = self._projects_by_user.get(user_id, [])
             if not any(p.id == body.project_id for p in owned):
@@ -175,6 +177,7 @@ class MockScanWorkflow:
         return build_scan_compare(parent, child)
 
     def rescan_scan(self, scan_id: UUID, *, user_id: UUID) -> RescanResponse:
+        check_scan_create_rate_limit(user_id)
         parent = self.get_scan(scan_id, user_id=user_id)
         new_id = uuid4()
         child_created = datetime.now(timezone.utc).isoformat()

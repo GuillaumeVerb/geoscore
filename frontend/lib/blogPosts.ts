@@ -3,6 +3,13 @@ export type BlogPostMeta = { slug: string; title: string; date: string; lede: st
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "honest-limits-utility-trust",
+    title: "Why honest limits make a utility tool more trustworthy",
+    date: "2026-04-22",
+    lede:
+      "The same reason people trust a plain PDF converter: the job is narrow, the output is clear, and the product admits what it could not see.",
+  },
+  {
     slug: "pricing-pages-clarity-beats-keyword-stuffing",
     title: "Pricing pages: clarity beats keyword stuffing",
     date: "2026-04-21",

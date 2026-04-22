@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { AuthNav } from "@/components/AuthNav";
+import { SiteFooter } from "@/components/SiteFooter";
 
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div id="main-content" tabIndex={-1} className="mainContent">
             {children}
           </div>
+          <SiteFooter />
         </div>
       </body>
     </html>

@@ -17,6 +17,8 @@ node_modules/
 .next/
 out/
 dist/
+frontend/tsconfig.tsbuildinfo
+**/tsconfig.tsbuildinfo
 
 # IDE
 .idea/

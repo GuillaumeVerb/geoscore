@@ -41,6 +41,7 @@ from app.services.pipeline.render_fallback_decision import (
     visible_text_metrics,
 )
 from app.services.degraded_capture_fallback import enrich_score_bundle_for_degraded_capture
+from app.services.pipeline.scan_pipeline_logging import log_scan_pipeline_outcome
 from app.services.pipeline.score_minimal import run_deterministic_score
 
 logger = logging.getLogger(__name__)
@@ -162,6 +163,14 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
         scan.error_code = "HTTP_ERROR"
         scan.error_message = f"HTTP {out.http_status}"
         scan.completed_at = _utcnow()
+        log_scan_pipeline_outcome(
+            scan.id,
+            scan.normalized_url,
+            final_status=ScanStatus.FAILED.value,
+            error_code="HTTP_ERROR",
+            fetch_method=FETCH_METHOD_HTTP,
+            load_time_ms=out.load_time_ms,
+        )
         return
 
     # --- rendering: optional Playwright if HTTP HTML looks like an empty SPA shell ---
@@ -209,6 +218,20 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
         scan.error_code = "INSUFFICIENT_CAPTURE"
         scan.error_message = "Not enough rendered content after HTTP and optional Playwright"
         scan.completed_at = _utcnow()
+        _insufficient_fm = (
+            FETCH_METHOD_HTTP_PLAYWRIGHT_ATTEMPTED
+            if (trigger and settings.playwright_enabled and pw_result is not None)
+            else FETCH_METHOD_HTTP
+        )
+        _insufficient_load = out.load_time_ms + (pw_result.load_time_ms if pw_result else 0)
+        log_scan_pipeline_outcome(
+            scan.id,
+            scan.normalized_url,
+            final_status=ScanStatus.FAILED.value,
+            error_code="INSUFFICIENT_CAPTURE",
+            fetch_method=_insufficient_fm,
+            load_time_ms=_insufficient_load,
+        )
         return
 
     if choice == "playwright" and pw_result and pw_result.final_url:
@@ -385,6 +408,14 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
     scan.status = ScanStatus.PARTIAL.value if partial_for_score else ScanStatus.COMPLETED.value
     scan.completed_at = _utcnow()
     db.flush()
+    log_scan_pipeline_outcome(
+        scan.id,
+        scan.normalized_url,
+        final_status=scan.status,
+        partial=partial_for_score,
+        fetch_method=fetch_method_used,
+        load_time_ms=total_load_ms,
+    )
 
 
 def _replace_score_artifacts(
