@@ -1,31 +1,29 @@
 import type { Metadata } from "next";
 
-import { LandingAnalyzeSection } from "@/components/landing/LandingAnalyzeSection";
 import { LandingFooterCta } from "@/components/landing/LandingFooterCta";
-import { LandingHero } from "@/components/landing/LandingHero";
+import { LandingPrimaryTool } from "@/components/landing/LandingPrimaryTool";
 import { LandingRepeatUseSection } from "@/components/landing/LandingRepeatUseSection";
 import { LandingResultPreview } from "@/components/landing/LandingResultPreview";
+import { LandingScopeBoundary } from "@/components/landing/LandingScopeBoundary";
 import { LandingTrust } from "@/components/landing/LandingTrust";
-import { LandingValuePillars } from "@/components/landing/LandingValuePillars";
-import { LandingWhySeoGeo } from "@/components/landing/LandingWhySeoGeo";
+import { LandingUtilityWhy } from "@/components/landing/LandingUtilityWhy";
 
 export const metadata: Metadata = {
   title: {
     absolute: "GeoScore — SEO & GEO analyzer",
   },
   description:
-    "Paste a URL. Get a serious SEO & GEO score. Understand whether a page is ready to rank, be understood, and be cited in modern search environments.",
+    "Paste one URL. Get SEO and GEO scores, limits, and fixes you can share or export — a small utility, not a full SEO suite.",
 };
 
 export default function HomePage() {
   return (
     <main className="landing">
-      <LandingHero />
-      <LandingAnalyzeSection />
-      <LandingValuePillars />
-      <LandingWhySeoGeo />
+      <LandingPrimaryTool />
+      <LandingScopeBoundary />
       <LandingResultPreview />
       <LandingRepeatUseSection />
+      <LandingUtilityWhy />
       <LandingTrust />
       <LandingFooterCta />
     </main>

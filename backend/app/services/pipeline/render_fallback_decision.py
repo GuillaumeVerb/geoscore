@@ -88,6 +88,8 @@ def count_spa_signals(raw_html: str) -> tuple[int, list[str]]:
         hits.append("div_id_app")
     if re.search(r"webpackJsonp|chunk\.js|static/chunks/", h):
         hits.append("webpack_chunks")
+    if "/@vite/" in h:
+        hits.append("vite")
     if h.count("<script") >= 8 and len(h) > 10_000:
         hits.append("many_script_tags")
     return len(hits), hits

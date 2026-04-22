@@ -110,7 +110,11 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
     out: FetchOutcome | None = None
     html = ""
     try:
-        out = http_fetch(scan.normalized_url, timeout_sec=25.0)
+        out = http_fetch(
+            scan.normalized_url,
+            timeout_sec=settings.http_timeout_sec,
+            max_retries=settings.http_fetch_max_retries,
+        )
         html = out.html or ""
     except Exception as e:
         logger.exception("fetch exception scan_id=%s", scan_id)
@@ -172,6 +176,10 @@ def run_scan_pipeline(db: Session, scan_id: UUID) -> None:
             out.final_url or scan.normalized_url,
             timeout_ms=settings.playwright_timeout_ms,
             settle_ms=settings.playwright_settle_ms,
+            wait_for_load_state=settings.playwright_wait_for_load_state,
+            load_state_timeout_ms=settings.playwright_load_state_timeout_ms,
+            block_heavy_resources=settings.playwright_block_heavy_resources,
+            retry=settings.playwright_retry,
         )
 
     final_html, choice, pw_diag = choose_html_after_playwright(http_html, pw_result)

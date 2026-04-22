@@ -137,6 +137,7 @@ export function ExampleDemoPublicReportLayout({ report, source }: Props) {
   const orderedRecs = orderRecommendationsForDisplay(report.top_fixes ?? [], {
     partial: degraded,
     hasDegradationLimitations: degraded,
+    pageType: report.page_type ?? null,
   });
 
   return (

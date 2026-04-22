@@ -4,17 +4,15 @@ export function LandingFooterCta() {
   return (
     <section className="landingFooterCta" aria-labelledby="footer-cta-heading">
       <h2 className="landingFooterCtaTitle" id="footer-cta-heading">
-        Ready to check a page?
+        Another page to check?
       </h2>
-      <p className="muted landingFooterCtaLead">
-        Paste a URL. Get a serious SEO & GEO score — then share a clean public report if you want.
-      </p>
+      <p className="muted landingFooterCtaLead">Jump back to the URL field — same flow, no extra steps.</p>
       <div className="landingHeroCtas">
-        <a className="button" href="#analyze" aria-label="Analyze a URL: go to the URL input form">
-          Analyze a URL
+        <a className="button" href="#analyze" aria-label="Go to URL input at top of page">
+          Paste URL
         </a>
-        <Link className="button secondary" href="/report/demo-example" aria-label="Open example public report">
-          Example report
+        <Link className="button secondary" href="/dashboard">
+          Recent scans
         </Link>
       </div>
     </section>

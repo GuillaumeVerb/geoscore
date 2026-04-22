@@ -2,7 +2,7 @@
  * Presentation helpers for scan / public report UI (no scoring logic).
  */
 
-import type { ScanIssue, ScanLimitation, ScanRecommendation } from "@/types/scan";
+import type { ScanIssue, ScanLimitation, ScanRecommendation, ScanStatus } from "@/types/scan";
 
 const SYSTEM_SCOPE = "system";
 
@@ -57,16 +57,47 @@ export function partitionRecommendations(
   return { system, content };
 }
 
+function _scopeDisplayPriority(pageType: string | null | undefined, impactScope: string | undefined): number {
+  const pt = (pageType ?? "").toLowerCase();
+  const s = (impactScope ?? "").toLowerCase();
+  const commercial = ["landing_page", "homepage", "product_page", "pricing_page"].includes(pt);
+  if (commercial) {
+    if (s === "geo") return 0;
+    if (s === "seo") return 1;
+    return 2;
+  }
+  if (pt === "article") {
+    if (s === "seo") return 0;
+    if (s === "geo") return 1;
+    return 2;
+  }
+  return 0;
+}
+
+function _sortContentRecommendationsByPageType(
+  content: ScanRecommendation[],
+  pageType: string | null | undefined,
+): ScanRecommendation[] {
+  return [...content].sort((a, b) => {
+    const pa = a.priority ?? 99;
+    const pb = b.priority ?? 99;
+    if (pa !== pb) return pa - pb;
+    return _scopeDisplayPriority(pageType, a.impact_scope) - _scopeDisplayPriority(pageType, b.impact_scope);
+  });
+}
+
 /** System recommendations first when scan is partial or has degradation limitations. */
 export function orderRecommendationsForDisplay(
   recs: ScanRecommendation[],
-  opts: { partial: boolean; hasDegradationLimitations: boolean },
+  opts: { partial: boolean; hasDegradationLimitations: boolean; pageType?: string | null },
 ): ScanRecommendation[] {
   const { system, content } = partitionRecommendations(recs);
+  const pageType = opts.pageType ?? null;
+  const orderedContent = _sortContentRecommendationsByPageType(content, pageType);
   if (opts.partial || opts.hasDegradationLimitations) {
-    return [...system, ...content];
+    return [...system, ...orderedContent];
   }
-  return [...recs];
+  return _sortContentRecommendationsByPageType(recs, pageType);
 }
 
 export function hasDegradationLimitations(limitations: ScanLimitation[]): boolean {
@@ -82,6 +113,182 @@ export function softenLimitationMessage(message: string, maxLen = 220): string {
   const t = message.trim();
   if (t.length <= maxLen) return t;
   return `${t.slice(0, maxLen).trim()}…`;
+}
+
+/** Short labels for “why confidence is not maximal” (aligned with deterministic scoring inputs). */
+const CONFIDENCE_LIMIT_LABELS: Record<string, string> = {
+  FETCH_DEGRADED: "Fetch or HTTP status limited what we could measure.",
+  PARTIAL_PIPELINE: "Pipeline used partial or degraded capture (thin HTML, limits, or defences).",
+  PLAYWRIGHT_FAILED: "Headless render failed — HTTP snapshot may miss client-rendered content.",
+  PLAYWRIGHT_NO_GAIN: "Render ran but did not improve visible text vs HTTP.",
+  PLAYWRIGHT_DISABLED: "JS rendering path was disabled — dynamic content may be missing.",
+  PLAYWRIGHT_NOT_INSTALLED: "Browser automation unavailable — JS-heavy pages may be under-read.",
+  THIN_PAGE: "Very little text was extracted — GEO/SEO evidence is thin.",
+  MOCK_DATA: "Demo data — not a live capture.",
+  EXAMPLE_REPORT: "Sample report — illustrative only.",
+};
+
+export type ConfidenceDriver = { code: string; label: string };
+
+export function confidenceDriversFromScan(scan: {
+  status?: string | null;
+  limitations?: ScanLimitation[];
+  page_type_detected?: string | null;
+  page_type_final?: string | null;
+}): ConfidenceDriver[] {
+  const out: ConfidenceDriver[] = [];
+  const seen = new Set<string>();
+
+  const push = (code: string, label: string) => {
+    if (seen.has(code)) return;
+    seen.add(code);
+    out.push({ code, label });
+  };
+
+  const lims = scan.limitations ?? [];
+  const hasPartialLim = lims.some((l) => l.code === "PARTIAL_PIPELINE");
+
+  if ((scan.status ?? "").toLowerCase() === "partial" && !hasPartialLim) {
+    push(
+      "status_partial",
+      "Scan completed as partial — treat scores as directional until capture improves.",
+    );
+  }
+
+  for (const lim of lims) {
+    const mapped = CONFIDENCE_LIMIT_LABELS[lim.code];
+    if (mapped) {
+      push(`lim_${lim.code}`, mapped);
+    } else {
+      push(`lim_${lim.code}`, `${limitationHeadline(lim.code)}: ${softenLimitationMessage(lim.message, 140)}`);
+    }
+  }
+
+  const det = (scan.page_type_detected ?? "").trim();
+  const fin = (scan.page_type_final ?? "").trim();
+  if (det && fin && det !== fin) {
+    push(
+      "page_type_override",
+      "You chose a different page type than auto-detect — scoring weights follow your selection.",
+    );
+  }
+
+  return out;
+}
+
+export function displayHostOrPath(url: string): string {
+  const t = url.trim();
+  if (!t) return "this page";
+  try {
+    const u = t.startsWith("http") ? new URL(t) : new URL(`https://${t}`);
+    return u.hostname.replace(/^www\./, "") || t;
+  } catch {
+    return t.length > 48 ? `${t.slice(0, 45)}…` : t;
+  }
+}
+
+export function buildShareOneLiner(input: {
+  url: string;
+  global_score?: number | null;
+  seo_score?: number | null;
+  geo_score?: number | null;
+  topFixTitle?: string | null;
+}): string {
+  const host = displayHostOrPath(input.url);
+  const g = input.global_score;
+  const s = input.seo_score;
+  const geo = input.geo_score;
+  const scorePart =
+    g != null && s != null && geo != null
+      ? `Global ${Math.round(g)}/100 (SEO ${Math.round(s)}, GEO ${Math.round(geo)})`
+      : g != null
+        ? `Global ${Math.round(g)}/100`
+        : "Scores pending";
+  const fix = (input.topFixTitle ?? "").trim();
+  const tail = fix ? ` Top fix: ${fix.endsWith(".") ? fix.slice(0, -1) : fix}.` : "";
+  return `GeoScore — ${host}: ${scorePart}.${tail}`;
+}
+
+export function buildMinimalScanExport(input: {
+  scanId: string;
+  url: string;
+  scan: Pick<
+    ScanStatus,
+    | "status"
+    | "page_type_detected"
+    | "page_type_final"
+    | "global_score"
+    | "seo_score"
+    | "geo_score"
+    | "summary"
+    | "issues"
+    | "recommendations"
+    | "limitations"
+    | "scores"
+    | "meta"
+  >;
+  oneLiner?: string;
+}): Record<string, unknown> {
+  const { scan, scanId, url, oneLiner } = input;
+  const meta = scan.meta ?? {};
+  return {
+    schema: "geoscore.scan_export.v1",
+    scan_id: scanId,
+    url,
+    status: scan.status,
+    page_type: scan.page_type_final ?? scan.page_type_detected ?? null,
+    scores: {
+      global: scan.global_score ?? null,
+      seo: scan.seo_score ?? null,
+      geo: scan.geo_score ?? null,
+      breakdown: scan.scores ?? null,
+    },
+    summary: scan.summary ?? null,
+    share_one_liner: oneLiner ?? null,
+    issues: (scan.issues ?? []).map((i) => ({
+      code: i.code,
+      title: i.title,
+      severity: i.severity ?? null,
+      impact_scope: i.impact_scope ?? null,
+    })),
+    recommendations: (scan.recommendations ?? []).map((r) => ({
+      key: r.key ?? null,
+      title: r.title,
+      impact_scope: r.impact_scope ?? null,
+      priority: r.priority ?? null,
+    })),
+    limitations: scan.limitations ?? [],
+    versions: {
+      extraction: meta.extraction_version ?? meta.extractionVersion ?? null,
+      scoring: meta.scoring_version ?? meta.scoringVersion ?? null,
+      ruleset: meta.ruleset_version ?? meta.rulesetVersion ?? null,
+      llm_prompt: meta.llm_prompt_version ?? meta.llmPromptVersion ?? null,
+    },
+    meta_timestamps: {
+      completed_at: meta.completed_at ?? meta.completedAt ?? null,
+    },
+  };
+}
+
+export function pageTypeResultFraming(pageType: string | null | undefined): string | null {
+  const pt = (pageType ?? "").toLowerCase();
+  if (!pt) return null;
+  if (pt === "landing_page" || pt === "homepage") {
+    return "For this surface, fixes are ordered with commercial clarity first (hero, offer, trust), then discoverability.";
+  }
+  if (pt === "product_page" || pt === "pricing_page") {
+    return "For this surface, offer precision and trust cues are weighted ahead of generic content-depth nags.";
+  }
+  if (pt === "article") {
+    return "For editorial pages, structure and depth lead the checklist; commercial hero nags are de-emphasized.";
+  }
+  if (pt === "about_page") {
+    return "For about-style pages, entity trust and clarity matter more than conversion-style hero checks.";
+  }
+  if (pt === "app_page") {
+    return "For app or product UI pages, extractability and intent labels matter more than classic article signals.";
+  }
+  return null;
 }
 
 export function confidencePresentation(confidence: string | null | undefined): {

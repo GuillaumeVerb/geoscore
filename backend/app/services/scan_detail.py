@@ -259,6 +259,6 @@ def public_report_to_response(db: Session, public_id: str) -> PublicReportRespon
         meta={
             k: v
             for k, v in detail.meta.items()
-            if k in ("scoring_version", "ruleset_version", "llm_prompt_version")
+            if k in ("extraction_version", "scoring_version", "ruleset_version", "llm_prompt_version")
         },
     )

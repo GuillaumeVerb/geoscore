@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { ExampleDemoPublicReportLayout } from "@/components/ExampleDemoPublicReportLayout";
 import { CaptureQualityBanner } from "@/components/CaptureQualityBanner";
+import { CitationReadinessCard } from "@/components/CitationReadinessCard";
+import { ExportScanJsonButton } from "@/components/ExportScanJsonButton";
 import { IssuesList } from "@/components/IssuesList";
 import { LimitationsPanel } from "@/components/LimitationsPanel";
 import { MockDataBanner } from "@/components/MockDataBanner";
@@ -14,11 +16,13 @@ import { RecommendationsSection } from "@/components/RecommendationsSection";
 import { ScoreHeader } from "@/components/ScoreHeader";
 import { ScoreMethodNote } from "@/components/ScoreMethodNote";
 import { SectionTitle } from "@/components/SectionTitle";
+import { ShareOneLinerCard } from "@/components/ShareOneLinerCard";
 import { SummaryCard } from "@/components/SummaryCard";
 import { SystemIssuesCard } from "@/components/SystemIssuesCard";
 import { loadPublicReport } from "@/lib/loadScan";
 import { scanStatusFromPublicReport } from "@/lib/publicReportMapper";
 import {
+  buildShareOneLiner,
   hasDegradationLimitations,
   orderRecommendationsForDisplay,
   partitionIssues,
@@ -80,6 +84,15 @@ export function PublicReportView({ publicId, presentation = "shared" }: Props) {
   const orderedRecs = orderRecommendationsForDisplay(report.top_fixes ?? [], {
     partial: degraded,
     hasDegradationLimitations: degraded,
+    pageType: report.page_type ?? null,
+  });
+
+  const shareLine = buildShareOneLiner({
+    url: report.submitted_url,
+    global_score: report.global_score,
+    seo_score: report.seo_score,
+    geo_score: report.geo_score,
+    topFixTitle: orderedRecs[0]?.title ?? null,
   });
 
   return (
@@ -112,6 +125,8 @@ export function PublicReportView({ publicId, presentation = "shared" }: Props) {
 
       <SummaryCard url={report.submitted_url} summary={report.summary} />
 
+      <ShareOneLinerCard line={shareLine} />
+
       <LimitationsPanel limitations={lims} prominent={degraded} />
 
       <PageTypeConfidenceCard scan={scan} emphasizeConfidence={emphasizeConfidence} />
@@ -126,6 +141,14 @@ export function PublicReportView({ publicId, presentation = "shared" }: Props) {
       <section className="card block" aria-labelledby="pub-recs">
         <SectionTitle id="pub-recs">Top recommendations</SectionTitle>
         <RecommendationsSection items={orderedRecs} groupSystemFirst={degraded} />
+      </section>
+
+      <CitationReadinessCard scores={scan.scores} />
+
+      <section className="card block" aria-labelledby="pub-export-heading">
+        <SectionTitle id="pub-export-heading">Export</SectionTitle>
+        <p className="small muted sectionLead">Same minimal JSON shape as the private result view.</p>
+        <ExportScanJsonButton scanId={String(report.scan_id)} url={report.submitted_url} scan={scan} oneLiner={shareLine} />
       </section>
     </main>
   );

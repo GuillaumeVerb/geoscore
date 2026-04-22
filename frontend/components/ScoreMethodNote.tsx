@@ -22,19 +22,20 @@ function metaString(meta: Record<string, unknown> | null | undefined, snake: str
 export function ScoreMethodNote({ source, meta, compact }: Props) {
   const ruleset = metaString(meta, "ruleset_version", "rulesetVersion") ?? RULESET_VERSION_LABEL;
   const scoring = metaString(meta, "scoring_version", "scoringVersion") ?? SCORING_VERSION_LABEL;
+  const extraction = metaString(meta, "extraction_version", "extractionVersion");
 
   const basis =
     source === "mock"
       ? "Illustrative data using the same score layout as a live run."
       : "Scores come from deterministic rules first (bounded LLM where configured), with visible limitations and confidence.";
 
+  const versions = [extraction, scoring, ruleset].filter(Boolean).join(" · ");
+
   return (
     <div className={compact ? "scoreMethodNote scoreMethodNote--compact" : "scoreMethodNote"}>
       <p className="small muted" style={{ margin: 0 }}>
         {basis}{" "}
-        <span className="mono">
-          {scoring} · {ruleset}
-        </span>
+        <span className="mono">{versions}</span>
         {" · "}
         <Link href="/how-it-works">How scoring works</Link>
       </p>

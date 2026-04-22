@@ -9,6 +9,17 @@ export function LandingResultPreview() {
       <p className="landingSectionLead">
         A compact result: scores, confidence, and actionable notes — not a crowded dashboard.
       </p>
+      <ul className="landingPortableList muted small" aria-label="Takeaway formats">
+        <li>
+          <strong className="landingPortableStrong">Share</strong> — public snapshot link when you enable it.
+        </li>
+        <li>
+          <strong className="landingPortableStrong">Copy</strong> — one-line summary for Slack or email.
+        </li>
+        <li>
+          <strong className="landingPortableStrong">Export</strong> — minimal JSON for Notion, tickets, or CI.
+        </li>
+      </ul>
       <div className="landingPreviewCard" role="group" aria-labelledby="preview-heading">
         <div className="landingPreviewScores">
           <div>

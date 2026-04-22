@@ -10,12 +10,25 @@ export function LandingRepeatUseSection() {
         Same URL, over time
       </h2>
       <p className="landingSectionLead">
-        GeoScore is not only a one-off check. Group scans into <strong>projects</strong>, rescan after you ship
-        changes, then open <strong>compare to previous run</strong> to see whether scores and issues moved in the right
-        direction — still explainable, still one page at a time.
+        GeoScore is not only a one-off check. Group scans into <strong>projects</strong>, run a fresh{" "}
+        <strong>rescan</strong> after you ship, then open <strong>compare to previous run</strong> to see whether scores
+        and issues moved — still explainable, still one page at a time.
+      </p>
+
+      <p className="landingRepeatDashboardCta">
+        <Link className="button secondary" href="/dashboard">
+          Open recent scans
+        </Link>
       </p>
 
       <div className="landingRepeatGrid">
+        <div className="landingRepeatCard">
+          <h3 className="landingRepeatCardTitle">Rescan</h3>
+          <p className="landingRepeatCardBody">
+            Re-run the same URL from the result page or dashboard after a deploy. Each run is stored so you can compare
+            without losing history.
+          </p>
+        </div>
         <div className="landingRepeatCard">
           <h3 className="landingRepeatCardTitle">Projects</h3>
           <p className="landingRepeatCardBody">

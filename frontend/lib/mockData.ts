@@ -92,6 +92,7 @@ export function buildMockScanDetail(scanId: string, urlHint?: string): ScanStatu
     meta: {
       submitted_url: submitted,
       normalized_url: normalized,
+      extraction_version: "v0-mock",
       scoring_version: "v0-mock",
       ruleset_version: "v0-mock",
       llm_prompt_version: null,
@@ -123,9 +124,11 @@ function buildDemoExamplePublicReport(submitted: string): PublicReport {
         structure: 74,
       },
       geo_subscores: {
-        clarity: 71,
+        hero_clarity: 71,
+        offer_clarity: 70,
         extractability: 69,
         citation_readiness: 71,
+        trust_entity: 68,
       },
     },
     top_issues: MOCK_ISSUES.slice(0, 2),
@@ -142,6 +145,7 @@ function buildDemoExamplePublicReport(submitted: string): PublicReport {
       "This page already covers baseline hygiene—HTTPS, a usable title length, and a mobile viewport—which helps both classic ranking signals and machine-readable structure. The clearest wins are snippet-level SEO (a stronger meta description) and a sharper H1 that states intent in plain language, so search and answer-style surfaces can anchor on one obvious topic.",
     analyzed_at: new Date().toISOString(),
     meta: {
+      extraction_version: "extraction-v1",
       scoring_version: "scoring-v1-cal03",
       ruleset_version: "ruleset-v1-cal03",
       llm_prompt_version: null,
@@ -169,6 +173,6 @@ export function buildMockPublicReport(publicId: string, urlHint?: string): Publi
     summary:
       "Public snapshot: illustrative GEO + SEO scores. Connect the API for live shared reports tied to a real scan.",
     analyzed_at: new Date().toISOString(),
-    meta: { scoring_version: "v0-mock", ruleset_version: "v0-mock" },
+    meta: { extraction_version: "v0-mock", scoring_version: "v0-mock", ruleset_version: "v0-mock" },
   };
 }

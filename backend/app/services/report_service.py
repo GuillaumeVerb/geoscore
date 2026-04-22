@@ -69,7 +69,11 @@ class ReportService:
             top_fixes=[],
             limitations=[],
             analyzed_at=scan.completed_at.isoformat() if scan.completed_at else None,
-            meta={"ruleset_version": scan.ruleset_version, "scoring_version": scan.scoring_version},
+            meta={
+                "extraction_version": scan.extraction_version,
+                "ruleset_version": scan.ruleset_version,
+                "scoring_version": scan.scoring_version,
+            },
         )
 
 

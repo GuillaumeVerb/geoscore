@@ -22,18 +22,20 @@ export function LimitationsPanel({ limitations, prominent, showCodes = true }: P
   const sorted = sortLimitationsForDisplay(limitations);
   const degraded = hasDegradationLimitations(limitations);
 
+  const heading = prominent ? "What this scan could not fully see" : "Analysis limitations";
+
   return (
     <section
       className={`limitationsPanel ${prominent ? "limitationsPanel--prominent" : ""}`}
       aria-labelledby="limitations-heading"
     >
       <h2 className="h2" id="limitations-heading">
-        Analysis limitations
+        {heading}
       </h2>
       {degraded ? (
         <p className="limitationsIntro">
-          These constraints affected what we could see of the page. They are separate from on-page SEO/GEO
-          findings below.
+          Honest boundaries build trust: these items describe capture or pipeline gaps, not your marketing copy. They are
+          separate from on-page SEO/GEO findings below.
         </p>
       ) : (
         <p className="limitationsIntro muted small">

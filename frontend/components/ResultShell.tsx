@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { CitationReadinessCard } from "@/components/CitationReadinessCard";
+import { ExportScanJsonButton } from "@/components/ExportScanJsonButton";
 import { IssuesList } from "@/components/IssuesList";
 import { LimitationsPanel } from "@/components/LimitationsPanel";
 import { MockDataBanner } from "@/components/MockDataBanner";
@@ -13,12 +15,14 @@ import { ScanStatusCard } from "@/components/ScanStatusCard";
 import { ScoreBreakdown } from "@/components/ScoreBreakdown";
 import { SectionTitle } from "@/components/SectionTitle";
 import { ScoreMethodNote } from "@/components/ScoreMethodNote";
+import { ShareOneLinerCard } from "@/components/ShareOneLinerCard";
 import { ShareReportCard } from "@/components/ShareReportCard";
 import { StrengthsList } from "@/components/StrengthsList";
 import { SummaryCard } from "@/components/SummaryCard";
 import { SystemIssuesCard } from "@/components/SystemIssuesCard";
 import type { DataSource } from "@/lib/loadScan";
 import {
+  buildShareOneLiner,
   hasDegradationLimitations,
   isFinalScanStatus,
   orderRecommendationsForDisplay,
@@ -57,9 +61,11 @@ export function ResultShell({
     isPartial || degraded || (scan.analysis_confidence ?? "").toLowerCase() === "low";
 
   const { system: systemIssues, content: contentIssues } = partitionIssues(issues);
+  const pageTypeForOrdering = scan.page_type_final ?? scan.page_type_detected ?? null;
   const orderedRecs = orderRecommendationsForDisplay(recommendations, {
     partial: isPartial,
     hasDegradationLimitations: degraded,
+    pageType: pageTypeForOrdering,
   });
   const groupRecs = isPartial || degraded;
 
@@ -67,6 +73,21 @@ export function ResultShell({
   const parentScanId = scan.meta?.parent_scan_id;
   const hasParentForCompare =
     typeof parentScanId === "string" && parentScanId.length > 0 && final && !isFailed;
+
+  const exportUrl =
+    urlDisplay?.trim() ||
+    (typeof scan.meta?.normalized_url === "string" ? scan.meta.normalized_url : "") ||
+    (typeof scan.meta?.submitted_url === "string" ? scan.meta.submitted_url : "");
+  const shareLine =
+    final && !isFailed
+      ? buildShareOneLiner({
+          url: exportUrl,
+          global_score: scan.global_score,
+          seo_score: scan.seo_score,
+          geo_score: scan.geo_score,
+          topFixTitle: orderedRecs[0]?.title ?? null,
+        })
+      : "";
 
   return (
     <main className="resultMain">
@@ -101,6 +122,8 @@ export function ResultShell({
       <ScanStatusBanner status={scan.status} errorCode={scan.error_code} errorMessage={scan.error_message} />
 
       <SummaryCard url={urlDisplay} summary={scan.summary} />
+
+      {final && !isFailed && shareLine ? <ShareOneLinerCard line={shareLine} /> : null}
 
       <LimitationsPanel limitations={limitations} prominent={isPartial || degraded} />
 
@@ -138,6 +161,8 @@ export function ResultShell({
 
       <ScoreBreakdown scores={scan.scores} />
 
+      <CitationReadinessCard scores={scan.scores} />
+
       <PageTypeSelector
         scanId={routeScanId}
         current={scan.page_type_final ?? scan.page_type_detected}
@@ -148,8 +173,11 @@ export function ResultShell({
 
       <section className="card block">
         <SectionTitle>Actions</SectionTitle>
-        <div className="row">
+        <div className="row" style={{ flexWrap: "wrap", gap: "0.5rem" }}>
           <RescanButton scanId={routeScanId} apiEnabled={apiEnabled} onAfterRescan={onRefetchScan} />
+          {final && !isFailed ? (
+            <ExportScanJsonButton scanId={routeScanId} url={exportUrl} scan={scan} oneLiner={shareLine} />
+          ) : null}
           {hasParentForCompare ? (
             <Link
               href={`/scan/${routeScanId}/compare`}

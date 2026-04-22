@@ -29,6 +29,24 @@ class Settings(BaseSettings):
     playwright_enabled: bool = True
     playwright_timeout_ms: int = 25_000
     playwright_settle_ms: int = 1_200
+    # After domcontentloaded, wait for the load event (bounded) so slow SPAs can hydrate before settle.
+    playwright_wait_for_load_state: bool = True
+    playwright_load_state_timeout_ms: int = 8_000
+    # Block images / fonts / media in Playwright to reduce hangs and speed up text capture (extraction is text-first).
+    playwright_block_heavy_resources: bool = True
+    # Retry the Playwright run once (same URL) after transient failures or empty HTML.
+    playwright_retry: bool = True
+    # HTTP: transient retries (connection error or 502/503/504).
+    http_fetch_max_retries: int = 1
+    http_timeout_sec: float = 25.0
+    # Comma-separated hostnames (or *.domain.com): add extra seconds to HTTP timeout for slow origins.
+    http_timeout_boost_hosts: str = ""
+    http_host_extra_timeout_sec: float = 12.0
+    # Comma-separated: do not block images/fonts/media in Playwright for these hosts (text may load late).
+    playwright_resource_block_exempt_hosts: str = ""
+    # Comma-separated: add extra ms to Playwright navigation + load-state waits for these hosts.
+    playwright_timeout_boost_hosts: str = ""
+    playwright_host_timeout_boost_ms: int = 15_000
 
     @property
     def cors_origin_list(self) -> list[str]:

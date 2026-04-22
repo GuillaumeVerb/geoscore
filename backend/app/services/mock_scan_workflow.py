@@ -240,7 +240,7 @@ class MockScanWorkflow:
             meta={
                 k: v
                 for k, v in d.meta.items()
-                if k in ("scoring_version", "ruleset_version", "llm_prompt_version")
+                if k in ("extraction_version", "scoring_version", "ruleset_version", "llm_prompt_version")
             },
         )
 

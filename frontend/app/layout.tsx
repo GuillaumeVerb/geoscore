@@ -8,7 +8,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "GeoScore", template: "%s · GeoScore" },
   description:
-    "Paste a URL. Get a serious SEO & GEO score — explainable issues, prioritized fixes, and clear confidence.",
+    "Paste one URL. Get SEO and GEO scores, clear limits, and fixes you can share or export — a small utility, not a full SEO suite.",
   /** Google Search Console — URL prefix property (HTML tag method). Override via env if the token rotates. */
   verification: {
     google:

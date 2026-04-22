@@ -3,6 +3,7 @@ const POINTS = [
   "LLM is optional, bounded, and never drives the core score.",
   "Confidence and limitations are always visible when analysis is uncertain.",
   "No black-box score: issues, recommendations, and versions are explicit.",
+  "The UI stays plain on purpose — like a converter tool, the output matters more than the chrome.",
 ] as const;
 
 export function LandingTrust() {
