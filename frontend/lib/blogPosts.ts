@@ -45,3 +45,7 @@ export const BLOG_POSTS: BlogPostMeta[] = [
       "Two lenses on the same snapshot: classic search readiness vs how well the page can be understood, summarized, and cited.",
   },
 ];
+
+export function getBlogPostMeta(slug: string): BlogPostMeta | undefined {
+  return BLOG_POSTS.find((p) => p.slug === slug);
+}

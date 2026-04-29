@@ -7,6 +7,7 @@ import { DashboardGate } from "@/components/DashboardGate";
 export const metadata: Metadata = {
   title: "Recent scans",
   description: "Your recent GeoScore analyses: status, scores, and quick links back to each result.",
+  robots: { index: false, follow: true },
 };
 
 export default function DashboardPage() {

@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "SEO vs GEO: what actually changes for one page",
-  description:
-    "SEO vs GEO explained for one URL: ranking readiness vs extractability, clarity, and citation-style signals — without hype or a collapsed “AI score.”",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("seo-vs-geo-one-page")!;
+const DESCRIPTION =
+  "SEO vs GEO explained for one URL: ranking readiness vs extractability, clarity, and citation-style signals — without hype or a collapsed “AI score.”";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogSeoVsGeoOnePage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -106,5 +112,6 @@ export default function BlogSeoVsGeoOnePage() {
         <Link href="/blog">All posts</Link>
       </p>
     </article>
+    </>
   );
 }

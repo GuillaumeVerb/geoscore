@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Pricing pages: clarity beats keyword stuffing",
-  description:
-    "A bounded pass on one pricing URL: help buyers and retrieval systems understand who you serve, what they get, and what it costs — without SEO theater.",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("pricing-pages-clarity-beats-keyword-stuffing")!;
+const DESCRIPTION =
+  "A bounded pass on one pricing URL: help buyers and retrieval systems understand who you serve, what they get, and what it costs — without SEO theater.";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogPricingPagesClarityPage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -123,5 +129,6 @@ export default function BlogPricingPagesClarityPage() {
         <Link href="/blog">All posts</Link>
       </p>
     </article>
+    </>
   );
 }

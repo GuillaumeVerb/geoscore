@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "What “citation-ready” means on a real marketing page",
-  description:
-    "Citation readiness without hype: clear claims, extractable structure, and trust cues you can see on one URL — not a promise that a model will quote you.",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("citation-ready-real-marketing-page")!;
+const DESCRIPTION =
+  "Citation readiness without hype: clear claims, extractable structure, and trust cues you can see on one URL — not a promise that a model will quote you.";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogCitationReadyMarketingPage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -120,5 +126,6 @@ export default function BlogCitationReadyMarketingPage() {
         <Link href="/blog">All posts</Link>
       </p>
     </article>
+    </>
   );
 }

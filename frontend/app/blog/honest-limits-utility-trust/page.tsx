@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Why honest limits make a utility tool more trustworthy",
-  description:
-    "GeoScore as a narrow URL checker: limitations next to the score are a product feature, not an apology — like the best converter sites.",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("honest-limits-utility-trust")!;
+const DESCRIPTION =
+  "GeoScore as a narrow URL checker: limitations next to the score are a product feature, not an apology — like the best converter sites.";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogHonestLimitsUtilityPage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -61,5 +67,6 @@ export default function BlogHonestLimitsUtilityPage() {
         <Link href="/">Home</Link>
       </p>
     </article>
+    </>
   );
 }

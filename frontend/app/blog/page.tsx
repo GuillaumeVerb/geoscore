@@ -1,17 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BlogIndexJsonLd } from "@/components/BlogIndexJsonLd";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
     "Short, product-led notes on SEO, GEO, and single-page readiness — aligned with how GeoScore analyzes one URL.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "GeoScore blog",
+    description:
+      "Short, product-led notes on SEO, GEO, and single-page readiness — aligned with how GeoScore analyzes one URL.",
+    url: "/blog",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "GeoScore blog",
+    description:
+      "Short, product-led notes on SEO, GEO, and single-page readiness — aligned with how GeoScore analyzes one URL.",
+  },
 };
 
 export default function BlogIndexPage() {
   return (
     <main className="resultMain blogIndex">
+      <BlogIndexJsonLd />
       <header className="blogIndexHeader">
         <h1 className="resultTitle">Blog</h1>
         <p className="muted blogIndexLead">

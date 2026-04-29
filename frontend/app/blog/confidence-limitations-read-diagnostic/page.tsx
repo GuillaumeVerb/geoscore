@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Confidence and limitations: how to read a diagnostic honestly",
-  description:
-    "Why partial scans and visible limitations build trust; how to read confidence, issues, and fixes without treating a score as a promise.",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("confidence-limitations-read-diagnostic")!;
+const DESCRIPTION =
+  "Why partial scans and visible limitations build trust; how to read confidence, issues, and fixes without treating a score as a promise.";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogConfidenceLimitationsPage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -121,5 +127,6 @@ export default function BlogConfidenceLimitationsPage() {
         <Link href="/blog">All posts</Link>
       </p>
     </article>
+    </>
   );
 }

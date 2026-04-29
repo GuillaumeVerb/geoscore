@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Homepage readiness: a bounded checklist (no enterprise crawl)",
-  description:
-    "A fast, honest homepage pass you can do on one URL: structure, clarity, and trust signals — without pretending to audit an entire site.",
-};
+import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
+import { blogPostMetadata } from "@/lib/blogMetadata";
+import { getBlogPostMeta } from "@/lib/blogPosts";
+
+const POST = getBlogPostMeta("homepage-readiness-bounded-checklist")!;
+const DESCRIPTION =
+  "A fast, honest homepage pass you can do on one URL: structure, clarity, and trust signals — without pretending to audit an entire site.";
+
+export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 
 export default function BlogHomepageReadinessPage() {
   return (
-    <article className="blogArticle">
+    <>
+      <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
+      <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">
         <Link href="/blog">Blog</Link>
         <span aria-hidden="true"> · </span>
@@ -114,5 +120,6 @@ export default function BlogHomepageReadinessPage() {
         <Link href="/blog">All posts</Link>
       </p>
     </article>
+    </>
   );
 }
