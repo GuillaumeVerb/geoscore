@@ -1,4 +1,4 @@
-import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_POSTS, postRevisionDate } from "@/lib/blogPosts";
 
 export const BLOG_RSS_DESCRIPTION =
   "Short, product-led notes on SEO, GEO, and single-page readiness — aligned with how GeoScore analyzes one URL.";
@@ -16,14 +16,12 @@ function escapeXml(text: string): string {
 export function buildBlogRssXml(base: string): string {
   const origin = base.replace(/\/$/, "");
   const blogUrl = `${origin}/blog`;
-  const sorted = [...BLOG_POSTS].sort((a, b) =>
-    (b.updated ?? b.date).localeCompare(a.updated ?? a.date),
-  );
+  const sorted = [...BLOG_POSTS].sort((a, b) => postRevisionDate(b).localeCompare(postRevisionDate(a)));
 
   const items = sorted
     .map((p) => {
       const link = `${origin}/blog/${p.slug}`;
-      const stamp = p.updated ?? p.date;
+      const stamp = postRevisionDate(p);
       const pub = new Date(`${stamp}T12:00:00.000Z`);
       const pubDate = pub.toUTCString();
       return `    <item>

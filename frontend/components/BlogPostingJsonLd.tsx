@@ -1,4 +1,4 @@
-import type { BlogPostMeta } from "@/lib/blogPosts";
+import { postRevisionDate, type BlogPostMeta } from "@/lib/blogPosts";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 type Props = {
@@ -18,7 +18,7 @@ export function BlogPostingJsonLd({ post, description }: Props) {
     headline: post.title,
     description,
     datePublished: post.date,
-    dateModified: post.updated ?? post.date,
+    dateModified: postRevisionDate(post),
     url,
     mainEntityOfPage: {
       "@type": "WebPage",

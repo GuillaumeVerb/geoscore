@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_POSTS, postRevisionDate } from "@/lib/blogPosts";
 import { resolveSiteOrigin } from "@/lib/siteUrl";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({
     url: `${base}/blog/${p.slug}`,
-    lastModified: new Date(`${p.updated ?? p.date}T12:00:00Z`),
+    lastModified: new Date(`${postRevisionDate(p)}T12:00:00Z`),
     changeFrequency: "monthly" as const,
     priority: 0.65,
   }));

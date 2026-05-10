@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
-import type { BlogPostMeta } from "@/lib/blogPosts";
+import { type BlogPostMeta, postRevisionDate } from "@/lib/blogPosts";
 
 export function blogPostMetadata(post: BlogPostMeta, description: string): Metadata {
   const path = `/blog/${post.slug}`;
   const publishedTime = `${post.date}T12:00:00.000Z`;
-  const modifiedTime = `${post.updated ?? post.date}T12:00:00.000Z`;
+  const modifiedTime = `${postRevisionDate(post)}T12:00:00.000Z`;
   return {
     title: post.title,
     description,

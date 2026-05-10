@@ -1,4 +1,4 @@
-import { BLOG_POSTS } from "@/lib/blogPosts";
+import { BLOG_POSTS, postRevisionDate } from "@/lib/blogPosts";
 import { getSiteOrigin } from "@/lib/siteUrl";
 
 export function BlogIndexJsonLd() {
@@ -10,7 +10,7 @@ export function BlogIndexJsonLd() {
     headline: p.title,
     url: `${origin}/blog/${p.slug}`,
     datePublished: p.date,
-    dateModified: p.updated ?? p.date,
+    dateModified: postRevisionDate(p),
     description: p.lede,
   }));
 

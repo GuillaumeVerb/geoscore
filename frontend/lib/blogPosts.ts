@@ -3,10 +3,15 @@ export type BlogPostMeta = {
   slug: string;
   title: string;
   date: string;
-  /** ISO date YYYY-MM-DD — defaults to `date` when omitted (sitemap / OG modified time). */
+  /** ISO date YYYY-MM-DD — omit to use `date` for sitemap / RSS / OG last-modified. */
   updated?: string;
   lede: string;
 };
+
+/** Latest revision stamp for feeds and SEO metadata (publication `date` unless `updated` is set). */
+export function postRevisionDate(post: BlogPostMeta): string {
+  return post.updated ?? post.date;
+}
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
