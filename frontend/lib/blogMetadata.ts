@@ -4,7 +4,8 @@ import type { BlogPostMeta } from "@/lib/blogPosts";
 
 export function blogPostMetadata(post: BlogPostMeta, description: string): Metadata {
   const path = `/blog/${post.slug}`;
-  const isoDate = `${post.date}T12:00:00.000Z`;
+  const publishedTime = `${post.date}T12:00:00.000Z`;
+  const modifiedTime = `${post.updated ?? post.date}T12:00:00.000Z`;
   return {
     title: post.title,
     description,
@@ -14,8 +15,8 @@ export function blogPostMetadata(post: BlogPostMeta, description: string): Metad
       title: post.title,
       description,
       url: path,
-      publishedTime: isoDate,
-      modifiedTime: isoDate,
+      publishedTime,
+      modifiedTime,
     },
     twitter: {
       card: "summary_large_image",

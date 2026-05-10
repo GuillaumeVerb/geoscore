@@ -18,7 +18,7 @@ export function BlogPostingJsonLd({ post, description }: Props) {
     headline: post.title,
     description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     url,
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -28,11 +28,13 @@ export function BlogPostingJsonLd({ post, description }: Props) {
       "@type": "Organization",
       name: "GeoScore",
       url: origin,
+      description: "GeoScore builds a minimal SEO and GEO analyzer for single public URLs.",
     },
     publisher: {
       "@type": "Organization",
       name: "GeoScore",
       url: origin,
+      description: "GeoScore builds a minimal SEO and GEO analyzer for single public URLs.",
     },
     isPartOf: {
       "@type": "Blog",

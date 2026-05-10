@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BlogBreadcrumbJsonLd } from "@/components/BlogBreadcrumbJsonLd";
 import { BlogIndexJsonLd } from "@/components/BlogIndexJsonLd";
 import { BLOG_POSTS } from "@/lib/blogPosts";
 
@@ -28,6 +29,7 @@ export default function BlogIndexPage() {
   return (
     <main className="resultMain blogIndex">
       <BlogIndexJsonLd />
+      <BlogBreadcrumbJsonLd variant="index" />
       <header className="blogIndexHeader">
         <h1 className="resultTitle">Blog</h1>
         <p className="muted blogIndexLead">
@@ -57,6 +59,8 @@ export default function BlogIndexPage() {
         <Link href="/">Home</Link>
         {" · "}
         <Link href="/how-it-works">How scoring works</Link>
+        {" · "}
+        <Link href="/blog/rss.xml">RSS</Link>
       </p>
     </main>
   );

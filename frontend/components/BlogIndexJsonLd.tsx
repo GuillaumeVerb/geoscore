@@ -10,6 +10,7 @@ export function BlogIndexJsonLd() {
     headline: p.title,
     url: `${origin}/blog/${p.slug}`,
     datePublished: p.date,
+    dateModified: p.updated ?? p.date,
     description: p.lede,
   }));
 

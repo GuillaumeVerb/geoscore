@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BlogBreadcrumbJsonLd } from "@/components/BlogBreadcrumbJsonLd";
 import { BlogPostingJsonLd } from "@/components/BlogPostingJsonLd";
 import { blogPostMetadata } from "@/lib/blogMetadata";
 import { getBlogPostMeta } from "@/lib/blogPosts";
@@ -14,6 +15,7 @@ export const metadata: Metadata = blogPostMetadata(POST, DESCRIPTION);
 export default function BlogCitationReadyMarketingPage() {
   return (
     <>
+      <BlogBreadcrumbJsonLd variant="post" post={POST} />
       <BlogPostingJsonLd post={POST} description={DESCRIPTION} />
       <article className="blogArticle">
       <nav className="resultNavCrumb muted" aria-label="Breadcrumb">

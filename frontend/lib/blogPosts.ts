@@ -1,5 +1,12 @@
-/** Blog index + sitemap — keep slugs in sync with `app/blog/<slug>/`. */
-export type BlogPostMeta = { slug: string; title: string; date: string; lede: string };
+/** Blog index + sitemap — keep slugs in sync with `app/blog/<slug>/`. Optional `updated` bumps RSS/sitemap modified signals after edits. */
+export type BlogPostMeta = {
+  slug: string;
+  title: string;
+  date: string;
+  /** ISO date YYYY-MM-DD — defaults to `date` when omitted (sitemap / OG modified time). */
+  updated?: string;
+  lede: string;
+};
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
