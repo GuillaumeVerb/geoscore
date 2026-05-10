@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 
-import { getSiteOrigin } from "@/lib/siteUrl";
+import { resolveSiteOrigin } from "@/lib/siteUrl";
 
-export default function robots(): MetadataRoute.Robots {
-  const base = getSiteOrigin();
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const base = await resolveSiteOrigin();
   return {
     rules: {
       userAgent: "*",

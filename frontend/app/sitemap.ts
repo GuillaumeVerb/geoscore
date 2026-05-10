@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
 import { BLOG_POSTS } from "@/lib/blogPosts";
-import { getSiteOrigin } from "@/lib/siteUrl";
+import { resolveSiteOrigin } from "@/lib/siteUrl";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = getSiteOrigin();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const base = await resolveSiteOrigin();
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${base}/`, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
@@ -22,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map((p) => ({
     url: `${base}/blog/${p.slug}`,
-    lastModified: new Date(p.date),
+    lastModified: new Date(`${p.updated ?? p.date}T12:00:00Z`),
     changeFrequency: "monthly" as const,
     priority: 0.65,
   }));
