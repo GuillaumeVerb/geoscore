@@ -15,6 +15,13 @@ export function postRevisionDate(post: BlogPostMeta): string {
 
 export const BLOG_POSTS: BlogPostMeta[] = [
   {
+    slug: "documentation-pages-structure-findability-trust",
+    title: "Documentation pages: structure, findability, and trust",
+    date: "2026-04-23",
+    lede:
+      "One docs URL: outline-style structure, titles that match real queries, and trust signals — SEO basics plus extractability, without indexing your whole knowledge base.",
+  },
+  {
     slug: "honest-limits-utility-trust",
     title: "Why honest limits make a utility tool more trustworthy",
     date: "2026-04-22",
